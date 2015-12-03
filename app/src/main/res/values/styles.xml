@@ -1,0 +1,58 @@
+<resources>
+
+    <!-- 应用基础主题 -->
+    <style name="MLTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- 在这里自定义自己的主题 -->
+        <!-- 默认主要颜色，一般是 Toolbar 等颜色 -->
+        <item name="colorPrimary">@color/ml_theme_primary</item>
+        <!-- 深一些的主要色，一般是状态栏等颜色 -->
+        <item name="colorPrimaryDark">@color/ml_theme_primary_dark</item>
+        <!--各控件激活时的颜色，一般是 CheckBox、EditText、Switch、Spinner、RadioButton 等控件激活的颜色-->
+        <item name="colorAccent">@color/ml_theme_accent</item>
+
+        <!--设置主题不需要ActionBar-->
+        <item name="windowActionBar">false</item>
+        <!--设置主题不需要Title-->
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!--默认主题-->
+    <style name="MLTheme.Default"></style>
+
+    <!--搜索界面的 Toolbar 主题-->
+    <style name="MLTheme.ToolbarSearch" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textColorPrimary">@color/ml_text_black_1</item>
+        <item name="colorControlNormal">@color/ml_text_black_2</item>
+        <item name="colorControlActivated">@color/ml_theme_accent</item>
+    </style>
+    <!--搜索界面 Activity 主题-->
+    <style name="MLTheme.Search" parent="MLTheme.Default">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="autoCompleteTextViewStyle">@style/MLTheme.Widget.Search.AutoCompleteTextView
+        </item>
+        <item name="searchViewStyle">@style/MLTheme.Widget.SearchView</item>
+        <item name="colorControlNormal">@color/ml_text_black_2</item>
+        <item name="colorControlActivated">@color/ml_theme_accent</item>
+    </style>
+
+    <!--搜索框的样式-->
+    <style name="MLTheme.Widget.SearchView" parent="Widget.AppCompat.SearchView">
+        <item name="searchHintIcon">@null</item>
+        <item name="searchIcon">@null</item>
+        <item name="queryBackground">@null</item>
+        <item name="submitBackground">@null</item>
+    </style>
+
+    <!--搜索控件中显示自动提示内容 TextView 控件的样式-->
+    <style name="MLTheme.Widget.Search.AutoCompleteTextView" parent="Widget.AppCompat.Light.AutoCompleteTextView">
+        <item name="android:textColorHint">@color/ml_text_black_1</item>
+        <!-- If set to @null the cursor will be displayed using android:textColor -->
+        <item name="android:textCursorDrawable">@null</item>
+    </style>
+
+    <style name="MLTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="MLTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+</resources>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="alpha_search_scrim" format="float" type="fraction">0.8</item>
+</resources>

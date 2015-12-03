@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_menu_home"
+            android:title="@string/nav_menu_home" />
+        <item
+            android:id="@+id/nav_group"
+            android:icon="@drawable/ic_menu_group"
+            android:title="@string/nav_menu_group" />
+        <item
+            android:id="@+id/nav_call"
+            android:icon="@drawable/ic_menu_call"
+            android:title="@string/nav_menu_call" />
+        <item
+            android:id="@+id/nav_chat"
+            android:icon="@drawable/ic_menu_chat"
+            android:title="@string/nav_menu_chat" />
+        <item
+            android:id="@+id/nav_video_call"
+            android:icon="@drawable/ic_menu_video_chat"
+            android:title="@string/nav_menu_video_call" />
+    </group>
+    <item android:title="@string/nav_menu_setting">
+        <menu>
+            <item
+                android:id="@+id/nav_help"
+                android:icon="@drawable/ic_menu_help"
+                android:title="@string/nav_menu_help" />
+            <item
+                android:id="@+id/nav_setting"
+                android:icon="@drawable/ic_menu_setting"
+                android:title="@string/nav_menu_setting" />
+
+        </menu>
+    </item>
+</menu>
