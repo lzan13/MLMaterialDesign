@@ -1,4 +1,4 @@
-package net.melove.demo.materialdesign;
+package net.melove.demo.design;
 
 import org.junit.Test;
 

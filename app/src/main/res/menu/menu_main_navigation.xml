@@ -3,34 +3,34 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_home"
+            android:icon="@mipmap/ic_home_white_24dp"
             android:title="@string/nav_menu_home" />
         <item
             android:id="@+id/nav_group"
-            android:icon="@drawable/ic_menu_group"
+            android:icon="@mipmap/ic_group_white_24dp"
             android:title="@string/nav_menu_group" />
         <item
             android:id="@+id/nav_call"
-            android:icon="@drawable/ic_menu_call"
+            android:icon="@mipmap/ic_call_white_24dp"
             android:title="@string/nav_menu_call" />
         <item
             android:id="@+id/nav_chat"
-            android:icon="@drawable/ic_menu_chat"
+            android:icon="@mipmap/ic_chat_white_24dp"
             android:title="@string/nav_menu_chat" />
         <item
             android:id="@+id/nav_video_call"
-            android:icon="@drawable/ic_menu_video_chat"
+            android:icon="@mipmap/ic_video_chat_white_24dp"
             android:title="@string/nav_menu_video_call" />
     </group>
     <item android:title="@string/nav_menu_setting">
         <menu>
             <item
                 android:id="@+id/nav_help"
-                android:icon="@drawable/ic_menu_help"
+                android:icon="@mipmap/ic_help_white_24dp"
                 android:title="@string/nav_menu_help" />
             <item
                 android:id="@+id/nav_setting"
-                android:icon="@drawable/ic_menu_setting"
+                android:icon="@mipmap/ic_settings_white_24dp"
                 android:title="@string/nav_menu_setting" />
 
         </menu>

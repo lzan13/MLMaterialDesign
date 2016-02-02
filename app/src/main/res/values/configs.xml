@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer name="ml_time_color_change">200</integer>
+
+    <integer name="ml_time_transition">360</integer>
+    <integer name="ml_time_share_transition">500</integer>
+
+    <integer name="ml_time_activity">360</integer>
+
+    <integer name="ml_time_toast">500</integer>
+    <integer name="ml_time_fab_rotate">300</integer>
+</resources>

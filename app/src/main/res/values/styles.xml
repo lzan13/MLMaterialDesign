@@ -1,7 +1,6 @@
 <resources>
-
     <!-- 应用基础主题 -->
-    <style name="MLTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="MLTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- 在这里自定义自己的主题 -->
         <!-- 默认主要颜色，一般是 Toolbar 等颜色 -->
         <item name="colorPrimary">@color/ml_theme_primary</item>
@@ -14,17 +13,82 @@
         <item name="windowActionBar">false</item>
         <!--设置主题不需要Title-->
         <item name="windowNoTitle">true</item>
+
+        <!--menu anim style-->
+        <item name="drawerArrowStyle">@style/MLTheme.DrawerArrowToggle</item>
+
+        <!--设置 Toolbar 样式-->
+        <item name="toolbarStyle">@style/MLTheme.Toolbar</item>
+        <!--设置弹出菜单 PopupMenu 样式-->
+        <item name="popupMenuStyle">@style/MLTheme.PupopMenu</item>
+
     </style>
 
     <!--默认主题-->
-    <style name="MLTheme.Default"></style>
-
-    <!--搜索界面的 Toolbar 主题-->
-    <style name="MLTheme.ToolbarSearch" parent="ThemeOverlay.AppCompat.ActionBar">
-        <item name="android:textColorPrimary">@color/ml_text_black_1</item>
-        <item name="colorControlNormal">@color/ml_text_black_2</item>
-        <item name="colorControlActivated">@color/ml_theme_accent</item>
+    <style name="MLTheme.Default" parent="MLTheme.Base">
+        <!--定义Activity切换动画-->
+        <item name="android:windowAnimationStyle">@style/AnimSlide</item>
     </style>
+
+
+    <!-- 侧滑抽屉切换图标样式 -->
+    <style name="MLTheme.DrawerArrowToggle" parent="Base.Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/ml_white_87</item>
+    </style>
+
+    <!--自定义控件MLToast 动画-->
+    <style name="ml_toast_anim">
+        <item name="android:windowEnterAnimation">@anim/ml_anim_toast_in</item>
+        <item name="android:windowExitAnimation">@anim/ml_anim_toast_out</item>
+    </style>
+
+    <!--Activity切换的 Fade 动画-->
+    <style name="AnimFade" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/ml_anim_fade_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/ml_anim_fade_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/ml_anim_fade_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/ml_anim_fade_out</item>
+    </style>
+    <!--Activity切换 Slide 动画-->
+    <style name="AnimSlide" parent="@android:style/Animation">
+        <item name="android:activityOpenEnterAnimation">@anim/ml_anim_slide_right_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/ml_anim_slide_left_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/ml_anim_slide_left_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/ml_anim_slide_right_out</item>
+    </style>
+
+    <!--自定 AppBar样式-->
+    <style name="MLTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorControlNormal">@color/ml_white_100</item>
+        <item name="android:textColor">@color/ml_white_100</item>
+        <item name="android:textSize">@dimen/ml_size_18</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <!--自定 Toolbar 弹出 PopupMenu 样式，要想此设置生肖，在布局文件必须要自定义命名空间 xmlns：app-->
+    <style name="MLTheme.PupopMenu" parent="@style/ThemeOverlay.AppCompat">
+        <!--设置菜单项文字的背景-->
+        <!--<item name="android:background">@drawable/ml_popup_backaground</item>-->
+        <!--弹出菜单背景颜色-->
+        <item name="android:colorBackground">@color/ml_white_87</item>
+        <!--弹出菜单项的背景设置 主要是为了添加点击效果-->
+        <item name="android:itemBackground">@drawable/ml_click_rectangle_white</item>
+        <!--弹出菜单的文字颜色和大小-->
+        <item name="android:textColor">@color/ml_black_87</item>
+        <item name="android:textSize">@dimen/ml_size_16</item>
+    </style>
+
+    <!--自定义 Toolbar 样式-->
+    <style name="MLTheme.Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <!--Toolbar字体颜色-->
+        <item name="colorControlNormal">@color/ml_white_100</item>
+        <item name="android:textColor">@color/ml_white_100</item>
+        <item name="android:textSize">@dimen/ml_size_18</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    <!--自定义 TabLayout 的字体样式-->
+    <style name="MLCustomTabTextAppearance" parent="TextAppearance.Design.Tab"></style>
+
     <!--搜索界面 Activity 主题-->
     <style name="MLTheme.Search" parent="MLTheme.Default">
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -32,7 +96,7 @@
         <item name="autoCompleteTextViewStyle">@style/MLTheme.Widget.Search.AutoCompleteTextView
         </item>
         <item name="searchViewStyle">@style/MLTheme.Widget.SearchView</item>
-        <item name="colorControlNormal">@color/ml_text_black_2</item>
+        <item name="colorControlNormal">@color/ml_black_54</item>
         <item name="colorControlActivated">@color/ml_theme_accent</item>
     </style>
 
@@ -46,13 +110,8 @@
 
     <!--搜索控件中显示自动提示内容 TextView 控件的样式-->
     <style name="MLTheme.Widget.Search.AutoCompleteTextView" parent="Widget.AppCompat.Light.AutoCompleteTextView">
-        <item name="android:textColorHint">@color/ml_text_black_1</item>
+        <item name="android:textColorHint">@color/ml_black_87</item>
         <!-- If set to @null the cursor will be displayed using android:textColor -->
         <item name="android:textCursorDrawable">@null</item>
     </style>
-
-    <style name="MLTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="MLTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
 </resources>
