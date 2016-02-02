@@ -15,6 +15,7 @@ public class MLCPConstants {
 
 
     // Uri 格式 content://packagename.classname（也就是注册中android:authorities的属性值）
-    public static final Uri URI = Uri.parse("content://net.melove.demo.design.contentprovider");
+    public static final Uri URI_BASE = Uri.parse("content://net.melove.demo.design.contentprovider");
+    public static final Uri URI_USER = Uri.withAppendedPath(URI_BASE, "user");
 
 }

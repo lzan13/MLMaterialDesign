@@ -10,6 +10,8 @@ import net.melove.demo.design.util.MLLog;
  */
 public class MLBaseActivity extends AppCompatActivity {
 
+    public MLBaseActivity mActivity;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
