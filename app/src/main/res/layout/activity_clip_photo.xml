@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="net.melove.demo.design.clipphoto.MLClipPhotoActivity">
+
+    <Button
+        android:id="@+id/ml_btn_gallery_clip_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gallery Clip Photo" />
+
+    <Button
+        android:id="@+id/ml_btn_camera_clip_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Camera Clip Photo" />
+
+    <ImageView
+        android:id="@+id/ml_img_clip_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_character_blackcat" />
+
+    <ImageView
+        android:id="@+id/ml_img_src_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_character_penguin" />
+</LinearLayout>

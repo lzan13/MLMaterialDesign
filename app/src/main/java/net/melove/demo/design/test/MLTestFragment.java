@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import net.melove.demo.design.R;
+import net.melove.demo.design.clipphoto.MLClipPhotoActivity;
 import net.melove.demo.design.contentprovider.MLCPActivity;
 import net.melove.demo.design.util.MLLog;
 import net.melove.demo.design.widget.MLViewGroup;
@@ -64,6 +65,7 @@ public class MLTestFragment extends MLBaseFragment {
 
         getView().findViewById(R.id.ml_btn_test_jump).setOnClickListener(viewListener);
         getView().findViewById(R.id.ml_btn_test_toast).setOnClickListener(viewListener);
+        getView().findViewById(R.id.ml_btn_clip_photo).setOnClickListener(viewListener);
         getView().findViewById(R.id.ml_btn_test_record).setOnClickListener(viewListener);
 
     }
@@ -89,6 +91,9 @@ public class MLTestFragment extends MLBaseFragment {
                     break;
                 case R.id.ml_btn_test_toast:
 //                    MLToast.makeToast(1, "Test Toast").show();
+                    break;
+                case R.id.ml_btn_clip_photo:
+                    mActivity.startActivity(new Intent(mActivity, MLClipPhotoActivity.class));
                     break;
                 case R.id.ml_btn_test_record:
 
