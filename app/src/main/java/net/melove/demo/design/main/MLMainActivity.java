@@ -1,4 +1,4 @@
-package net.melove.demo.design.activity;
+package net.melove.demo.design.main;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +17,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import net.melove.demo.design.R;
-import net.melove.demo.design.test.MLBaseFragment;
+import net.melove.demo.design.search.MLSearchActivity;
+import net.melove.demo.design.bases.MLBaseActivity;
+import net.melove.demo.design.bases.MLBaseFragment;
 import net.melove.demo.design.test.MLTestFragment;
 
 /**
@@ -85,7 +87,7 @@ public class MLMainActivity extends MLBaseActivity implements
     }
 
     /**
-     * 初始化侧滑不举的一些操作
+     * 初始化侧滑抽屉的一些操作
      */
     private void initDrawer() {
         mNavigationView.setNavigationItemSelectedListener(this);
@@ -96,7 +98,7 @@ public class MLMainActivity extends MLBaseActivity implements
                 super.onDrawerClosed(drawerView);
                 mFragmentTransaction = getSupportFragmentManager().beginTransaction();
                 mFragmentTransaction.setCustomAnimations(R.anim.ml_anim_fade_in, R.anim.ml_anim_fade_out);
-                mFragmentTransaction.replace(R.id.ml_framelayout_container, mCurrentFragment);
+                mFragmentTransaction.replace(R.id.ml_fragment_container, mCurrentFragment);
                 mFragmentTransaction.commit();
             }
 

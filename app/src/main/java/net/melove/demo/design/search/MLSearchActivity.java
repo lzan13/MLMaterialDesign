@@ -1,4 +1,4 @@
-package net.melove.demo.design.activity;
+package net.melove.demo.design.search;
 
 import android.animation.Animator;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import android.view.ViewTreeObserver;
 import android.view.animation.AnimationUtils;
 
 import net.melove.demo.design.R;
+import net.melove.demo.design.bases.MLBaseActivity;
 
 /**
  * Created by lzan13 on 2015/12/3.

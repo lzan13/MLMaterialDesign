@@ -1,46 +1,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/ml_theme_background"
-    android:padding="@dimen/ml_dimen_16"
-    tools:context="net.melove.demo.chat.fragment.MLTestFragment">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/ml_theme_background"
+                android:padding="@dimen/ml_dimen_16">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <!--自定义ViewGroup，可以自动排列放在其中的子View-->
         <net.melove.demo.design.widget.MLViewGroup
             android:id="@+id/ml_view_custom_viewgroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/ml_btn_test_jump"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:elevation="@dimen/ml_dimen_0"
-                android:text="Jump" />
-
-            <Button
-                android:id="@+id/ml_btn_test_toast"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:elevation="@dimen/ml_dimen_0"
-                android:text="Test Toast" />
-            <Button
-                android:id="@+id/ml_btn_clip_photo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:elevation="@dimen/ml_dimen_0"
-                android:text="Clip Photo" />
-
-            <Button
-                android:id="@+id/ml_btn_test_record"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="录音" />
         </net.melove.demo.design.widget.MLViewGroup>
     </LinearLayout>
 

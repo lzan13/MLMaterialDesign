@@ -9,7 +9,7 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import net.melove.demo.design.R;
-import net.melove.demo.design.util.MLLog;
+import net.melove.demo.design.utils.MLLog;
 
 /**
  * Created by lzan13 on 2016/2/2.

@@ -1,4 +1,4 @@
-package net.melove.demo.design.test;
+package net.melove.demo.design.bases;
 
 
 import android.support.v4.app.Fragment;

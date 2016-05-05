@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="net.melove.demo.design">
+<manifest package="net.melove.demo.design"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.READ_USER_DICTIONARY" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_USER_DICTIONARY"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -13,37 +13,46 @@
         android:supportsRtl="true"
         android:theme="@style/MLTheme.Default">
         <activity
-            android:name=".activity.MLMainActivity"
+            android:name=".main.MLMainActivity"
             android:label="@string/app_name"
             android:theme="@style/MLTheme.Default">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.MLSearchActivity"
+            android:name=".search.MLSearchActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:theme="@style/MLTheme.Search">
             <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
+                <action android:name="android.intent.action.SEARCH"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
+                android:resource="@xml/searchable"/>
         </activity>
         <activity
             android:name=".contentprovider.MLCPActivity"
-            android:theme="@style/MLTheme.Default" />
+            android:theme="@style/MLTheme.Default"/>
 
         <provider
             android:name=".contentprovider.MLContentProvider"
-            android:authorities="net.melove.demo.design.contentprovider" />
+            android:authorities="net.melove.demo.design.contentprovider"/>
 
-        <activity android:name=".clipphoto.MLClipPhotoActivity"></activity>
+        <activity android:name=".clipphoto.MLClipPhotoActivity"/>
+        <activity
+            android:name=".test.MLTestThemeActivity"
+            android:label="@string/title_activity_mltest_theme"
+            android:parentActivityName=".bases.MLBaseActivity"
+            android:theme="@style/MLTheme.Default">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".bases.MLBaseActivity"/>
+        </activity>
     </application>
 
 </manifest>

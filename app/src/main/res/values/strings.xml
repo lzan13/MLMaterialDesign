@@ -111,6 +111,7 @@
 
     <!--提醒文字-->
     <string name="hint_search">输入搜索内容</string>
+    <string name="title_activity_mltest_theme">MLTestThemeActivity</string>
 
 </resources>
 

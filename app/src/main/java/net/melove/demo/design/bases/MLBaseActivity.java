@@ -1,9 +1,9 @@
-package net.melove.demo.design.activity;
+package net.melove.demo.design.bases;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import net.melove.demo.design.util.MLLog;
+import net.melove.demo.design.utils.MLLog;
 
 /**
  * Created by lzan13 on 2015/12/1.

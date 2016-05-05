@@ -114,4 +114,8 @@
         <!-- If set to @null the cursor will be displayed using android:textColor -->
         <item name="android:textCursorDrawable">@null</item>
     </style>
+
+    <style name="MLTheme.Default.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="MLTheme.Default.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 </resources>

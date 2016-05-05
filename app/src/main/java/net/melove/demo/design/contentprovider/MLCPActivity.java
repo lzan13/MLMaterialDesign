@@ -5,17 +5,15 @@ import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 import net.melove.demo.design.R;
-import net.melove.demo.design.activity.MLBaseActivity;
+import net.melove.demo.design.bases.MLBaseActivity;
 
 /**
  * Created by lzan13 on 2016/2/2.

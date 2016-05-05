@@ -1,4 +1,4 @@
-package net.melove.demo.design.util;
+package net.melove.demo.design.utils;
 
 import android.util.Log;
 

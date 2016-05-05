@@ -22,7 +22,14 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:design:23.1.1'
-    compile 'com.android.support:cardview-v7:23.1.1'
+    // Android V7库，因为已经包含了V4库，所以这里不需要再引入V4库了
+    //    compile 'com.android.support:appcompat-v7:23.2.0'
+    // CardView 卡片风格控件库
+    compile 'com.android.support:cardview-v7:23.2.0'
+    // 新的遵循 Android  Material design 设计风格库 包含了v7和RecyclerView库
+    compile 'com.android.support:design:23.2.0'
+    // Android 官方提供的替代 ListView
+    //    compile 'com.android.support:recyclerview-v7:23.2.0'
+    // Google Play Service 库，使用GCM推送需要
+    //    compile "com.google.android.gms:play-services-gcm:8.4.0"
 }
