@@ -6,14 +6,13 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
 import net.melove.demo.design.R;
-import net.melove.demo.design.utils.MLFile;
-import net.melove.demo.design.utils.MLMedia;
+import net.melove.demo.design.application.MLBaseActivity;
+import net.melove.demo.design.utils.MLFileUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,7 +20,7 @@ import java.io.FileNotFoundException;
 /**
  * 剪切图片，从图库选择或者相机拍摄图片后修剪图片并展示
  */
-public class MLClipPhotoActivity extends AppCompatActivity {
+public class MLClipPhotoActivity extends MLBaseActivity {
     private ImageView mImageViewClip;
     private ImageView mImageViewSrc;
     private File mTempFile;
@@ -78,7 +77,7 @@ public class MLClipPhotoActivity extends AppCompatActivity {
         // 激活相机
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // 判断存储卡是否可以用，可用进行存储
-        if (MLFile.hasSdcard()) {
+        if (MLFileUtil.hasSdcard()) {
             // 这里先设置好等下拍照保存的文件路径
             mTempFile = new File(tempPath, "CameraTemp.jpg");
             // 根据文件路径解析成Uri
@@ -142,7 +141,7 @@ public class MLClipPhotoActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
         case 1:
-            if (MLFile.hasSdcard()) {
+            if (MLFileUtil.hasSdcard()) {
                 Uri uri = Uri.fromFile(mTempFile);
                 clipImage(uri, 512, 512);
 
@@ -157,7 +156,7 @@ public class MLClipPhotoActivity extends AppCompatActivity {
             if (data != null) {
                 Uri uri = data.getData();
                 // 这里解析获取选择的图片的绝对路径
-                String imgPath = MLMedia.getPath(this, uri);
+                String imgPath = MLFileUtil.getPath(this, uri);
                 Uri uriAbsolute = Uri.fromFile(new File(imgPath));
                 clipImage(uriAbsolute, 512, 512);
 

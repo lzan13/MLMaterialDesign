@@ -1,6 +1,8 @@
 package net.melove.demo.design.search;
 
 import android.animation.Animator;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.SearchView;
@@ -12,7 +14,7 @@ import android.view.ViewTreeObserver;
 import android.view.animation.AnimationUtils;
 
 import net.melove.demo.design.R;
-import net.melove.demo.design.bases.MLBaseActivity;
+import net.melove.demo.design.application.MLBaseActivity;
 
 /**
  * Created by lzan13 on 2015/12/3.
@@ -62,6 +64,7 @@ public class MLSearchActivity extends MLBaseActivity {
             // We use a view tree observer to set this up once the view is measured & laid out
             searchPanel.getViewTreeObserver().addOnPreDrawListener(
                     new ViewTreeObserver.OnPreDrawListener() {
+                        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
                         @Override
                         public boolean onPreDraw() {
                             searchPanel.getViewTreeObserver().removeOnPreDrawListener(this);

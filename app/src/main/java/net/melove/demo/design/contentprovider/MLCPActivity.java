@@ -13,7 +13,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import net.melove.demo.design.R;
-import net.melove.demo.design.bases.MLBaseActivity;
+import net.melove.demo.design.application.MLBaseActivity;
 
 /**
  * Created by lzan13 on 2016/2/2.

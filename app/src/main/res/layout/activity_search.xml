@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.SearchActivity">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context=".search.MLSearchActivity">
 
     <View
         android:id="@+id/scrim"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="@fraction/alpha_search_scrim"
-        android:background="@color/ml_white_87" />
+        android:background="@color/ml_white_87"/>
 
     <android.support.v7.widget.CardView
         android:id="@+id/search_panel"
@@ -36,16 +35,18 @@
                 <android.support.v7.widget.SearchView
                     android:id="@+id/search_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="?attr/colorPrimary"
                     android:imeOptions="actionSearch|flagNoExtractUi"
-                    app:theme="@style/MLTheme.Toolbar" />
+                    app:popupTheme="@style/MLTheme.PopupOverlay"
+                    app:theme="@style/MLTheme.ToolbarOverlay"/>
 
             </android.support.v7.widget.Toolbar>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/ml_dimen_1"
-                android:background="@color/ml_gray_26" />
+                android:background="@color/ml_black_38"/>
 
             <ListView
                 android:id="@+id/search_results"
@@ -55,7 +56,7 @@
                 android:divider="@null"
                 android:paddingBottom="@dimen/ml_dimen_16"
                 android:paddingTop="@dimen/ml_dimen_16"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
         </LinearLayout>
 

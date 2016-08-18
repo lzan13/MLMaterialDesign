@@ -10,15 +10,17 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/MLTheme.Default.AppBarOverlay">
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:theme="@style/MLTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/MLTheme.Default.PopupOverlay"/>
+            app:popupTheme="@style/MLTheme.PopupOverlay"
+            app:theme="@style/MLTheme.ToolbarOverlay"/>
 
     </android.support.design.widget.AppBarLayout>
 

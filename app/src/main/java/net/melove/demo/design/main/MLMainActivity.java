@@ -1,6 +1,8 @@
 package net.melove.demo.design.main;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -17,9 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import net.melove.demo.design.R;
+import net.melove.demo.design.application.MLBaseActivity;
+import net.melove.demo.design.application.MLBaseFragment;
 import net.melove.demo.design.search.MLSearchActivity;
-import net.melove.demo.design.bases.MLBaseActivity;
-import net.melove.demo.design.bases.MLBaseFragment;
 import net.melove.demo.design.test.MLTestFragment;
 
 /**
@@ -54,11 +56,11 @@ public class MLMainActivity extends MLBaseActivity implements
      * 初始化界面控件
      */
     private void initView() {
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.layout_drawer);
-        mNavigationView = (NavigationView) findViewById(R.id.view_navigation);
-        mToolbar = (Toolbar) findViewById(R.id.widget_toolbar);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.ml_layout_drawer);
+        mNavigationView = (NavigationView) findViewById(R.id.ml_widget_navigation);
+        mToolbar = (Toolbar) findViewById(R.id.ml_widget_toolbar);
 
-        mFab = (FloatingActionButton) findViewById(R.id.btn_fab);
+        mFab = (FloatingActionButton) findViewById(R.id.ml_btn_fab);
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,8 +83,8 @@ public class MLMainActivity extends MLBaseActivity implements
         mCurrentFragment = MLTestFragment.newInstance();
         mToolbar.setTitle("Test");
         mFragmentTransaction = getSupportFragmentManager().beginTransaction();
-        mFragmentTransaction.replace(R.id.ml_framelayout_container, mCurrentFragment);
-        mFragmentTransaction.setCustomAnimations(R.anim.ml_anim_fade_in, R.anim.ml_anim_fade_out);
+        mFragmentTransaction.replace(R.id.ml_fragment_container, mCurrentFragment);
+        mFragmentTransaction.setCustomAnimations(R.anim.ml_anim_fade_enter, R.anim.ml_anim_fade_exit);
         mFragmentTransaction.commit();
     }
 
@@ -97,7 +99,7 @@ public class MLMainActivity extends MLBaseActivity implements
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 mFragmentTransaction = getSupportFragmentManager().beginTransaction();
-                mFragmentTransaction.setCustomAnimations(R.anim.ml_anim_fade_in, R.anim.ml_anim_fade_out);
+                mFragmentTransaction.setCustomAnimations(R.anim.ml_anim_fade_enter, R.anim.ml_anim_fade_exit);
                 mFragmentTransaction.replace(R.id.ml_fragment_container, mCurrentFragment);
                 mFragmentTransaction.commit();
             }
@@ -127,16 +129,17 @@ public class MLMainActivity extends MLBaseActivity implements
         return super.onCreateOptionsMenu(menu);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_search:
-                Intent intent = new Intent();
-                intent.setClass(this, MLSearchActivity.class);
-                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeCustomAnimation(this,
-                        android.R.anim.fade_in, android.R.anim.fade_out);
-                startActivity(intent, optionsCompat.toBundle());
-                break;
+        case R.id.action_search:
+            Intent intent = new Intent();
+            intent.setClass(this, MLSearchActivity.class);
+            ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeCustomAnimation(this,
+                    android.R.anim.fade_in, android.R.anim.fade_out);
+            mActivity.startActivity(intent, optionsCompat.toBundle());
+            break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -151,21 +154,21 @@ public class MLMainActivity extends MLBaseActivity implements
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case R.id.nav_home:
+        case R.id.nav_home:
 
-                break;
-            case R.id.nav_group:
+            break;
+        case R.id.nav_group:
 
-                break;
-            case R.id.nav_call:
+            break;
+        case R.id.nav_call:
 
-                break;
-            case R.id.nav_chat:
+            break;
+        case R.id.nav_chat:
 
-                break;
-            case R.id.nav_video_call:
+            break;
+        case R.id.nav_video_call:
 
-                break;
+            break;
 
         }
         mDrawerLayout.closeDrawer(GravityCompat.START);

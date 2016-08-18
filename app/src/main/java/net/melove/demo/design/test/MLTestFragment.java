@@ -10,9 +10,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import net.melove.demo.design.R;
-import net.melove.demo.design.bases.MLBaseFragment;
+import net.melove.demo.design.application.MLBaseFragment;
 import net.melove.demo.design.clipphoto.MLClipPhotoActivity;
 import net.melove.demo.design.utils.MLLog;
+import net.melove.demo.design.waveform.MLWaveformActivity;
 import net.melove.demo.design.widget.MLViewGroup;
 
 
@@ -100,8 +101,9 @@ public class MLTestFragment extends MLBaseFragment {
                 mActivity.startActivity(intent);
                 break;
             case 101:
-                Intent intentRecord = new Intent();
-
+                Intent recordIntent = new Intent();
+                recordIntent.setClass(mActivity, MLWaveformActivity.class);
+                mActivity.startActivity(recordIntent);
                 break;
             case 102:
                 // 跳转到选择图片功能页

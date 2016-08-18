@@ -14,20 +14,45 @@
         <!--设置主题不需要Title-->
         <item name="windowNoTitle">true</item>
 
-        <!--menu anim style-->
-        <item name="drawerArrowStyle">@style/MLTheme.DrawerArrowToggle</item>
+        <!--&lt;!&ndash;menu anim style&ndash;&gt;-->
+        <!--<item name="drawerArrowStyle">@style/MLTheme.DrawerArrowToggle</item>-->
 
-        <!--设置 Toolbar 样式-->
-        <item name="toolbarStyle">@style/MLTheme.Toolbar</item>
-        <!--设置弹出菜单 PopupMenu 样式-->
-        <item name="popupMenuStyle">@style/MLTheme.PupopMenu</item>
+        <!--设置 ActionMode 效果，防止 ActionMode 将Toolbar顶下去-->
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowActionBarOverlay">true</item>
 
+        <!--定义 Activity 切换动画-->
+        <item name="android:windowAnimationStyle">@style/AnimSlide</item>
+
+        <!--设置 Dialog 样式 在4.x上会导致ProgressDialog有双重背景，暂时取消设置-->
+        <!--<item name="android:dialogTheme">@style/MLTheme.DialogOverlay</item>-->
+
+    </style>
+
+    <!--启动时的主题样式-->
+    <style name="MLTheme.Launcher" parent="MLTheme.Base">
+        <!--防止启动瞬间黑屏或白屏，程序启动时的背景图，可以设置为一张代表性的logo，或者设置app框架类图-->
+        <item name="android:windowBackground">@mipmap/bg_launcher_statusbar_toolbar_tab</item>
+    </style>
+
+    <!--设置 Activity 透明主题-->
+    <style name="MLTheme.Transparent" parent="MLTheme.Base">
+        <item name="android:windowAnimationStyle">@style/AnimFade</item>
+        <item name="android:windowBackground">@color/ml_theme_background</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+    <!--设置 Activity 半透明主题-->
+    <style name="MLTheme.Translucent" parent="MLTheme.Base">
+        <item name="android:windowAnimationStyle">@style/AnimFade</item>
+        <item name="android:windowBackground">@color/ml_theme_background</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <!--默认主题-->
     <style name="MLTheme.Default" parent="MLTheme.Base">
-        <!--定义Activity切换动画-->
-        <item name="android:windowAnimationStyle">@style/AnimSlide</item>
+        <!--按钮颜色-->
+        <!--<item name="colorButtonNormal">@color/ml_orange_54</item>-->
+        <!--<item name="android:colorButtonNormal">@color/ml_gray_87</item>-->
     </style>
 
 
@@ -38,84 +63,84 @@
 
     <!--自定义控件MLToast 动画-->
     <style name="ml_toast_anim">
-        <item name="android:windowEnterAnimation">@anim/ml_anim_toast_in</item>
-        <item name="android:windowExitAnimation">@anim/ml_anim_toast_out</item>
+        <item name="android:windowEnterAnimation">@anim/ml_anim_toast_enter</item>
+        <item name="android:windowExitAnimation">@anim/ml_anim_toast_exit</item>
     </style>
 
     <!--Activity切换的 Fade 动画-->
     <style name="AnimFade" parent="@android:style/Animation.Activity">
-        <item name="android:activityOpenEnterAnimation">@anim/ml_anim_fade_in</item>
-        <item name="android:activityOpenExitAnimation">@anim/ml_anim_fade_out</item>
-        <item name="android:activityCloseEnterAnimation">@anim/ml_anim_fade_in</item>
-        <item name="android:activityCloseExitAnimation">@anim/ml_anim_fade_out</item>
+        <item name="android:activityOpenEnterAnimation">@anim/ml_anim_fade_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/ml_anim_fade_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/ml_anim_fade_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/ml_anim_fade_exit</item>
     </style>
     <!--Activity切换 Slide 动画-->
     <style name="AnimSlide" parent="@android:style/Animation">
-        <item name="android:activityOpenEnterAnimation">@anim/ml_anim_slide_right_in</item>
-        <item name="android:activityOpenExitAnimation">@anim/ml_anim_slide_left_out</item>
-        <item name="android:activityCloseEnterAnimation">@anim/ml_anim_slide_left_in</item>
-        <item name="android:activityCloseExitAnimation">@anim/ml_anim_slide_right_out</item>
+        <item name="android:activityOpenEnterAnimation">@anim/ml_anim_slide_right_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/ml_anim_slide_left_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/ml_anim_slide_left_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/ml_anim_slide_right_exit</item>
     </style>
 
-    <!--自定 AppBar样式-->
+    <!--自定义默认 AppBar 样式，这里为了让文字显示为白色，继承黑色样式的ActionBar-->
     <style name="MLTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <!--Appbar 控制器颜色-->
         <item name="colorControlNormal">@color/ml_white_100</item>
+        <!--Appbar 标题颜色-->
         <item name="android:textColor">@color/ml_white_100</item>
-        <item name="android:textSize">@dimen/ml_size_18</item>
+        <!--Appbar 标题大小-->
+        <item name="android:textSize">@dimen/ml_size_16</item>
+        <!--Appbar 标题样式-->
+        <item name="android:textStyle">normal</item>
+        <!--更改菜单按钮样式 此菜单直的是当 action过多显示不全，会有三个小点儿样式-->
+        <!--<item name="android:actionOverflowButtonStyle">@style/MLTheme.ActionBarOverflow</item>-->
+    </style>
+
+    <!--自定义透明 Toolbar 样式，这里为了让文字显示为白色，继承黑色样式的ActionBar-->
+    <style name="MLTheme.ToolbarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <!--Toolbar 控制器颜色-->
+        <item name="colorControlNormal">@color/ml_white_100</item>
+        <!--Toolbar 上文字颜色-->
+        <item name="android:textColor">@color/ml_white_100</item>
+        <!--Toolbar 文字大小-->
+        <item name="android:textSize">@dimen/ml_size_16</item>
+        <!--Toolbar 文字样式-->
         <item name="android:textStyle">normal</item>
     </style>
 
+    <!--自定义溢出菜单图标样式-->
+    <style name="MLTheme.ActionBarOverflow" parent="@android:style/Widget.ActionButton.Overflow">
+        <item name="android:src">@mipmap/ic_add_white_24dp</item>
+    </style>
+
     <!--自定 Toolbar 弹出 PopupMenu 样式，要想此设置生肖，在布局文件必须要自定义命名空间 xmlns：app-->
-    <style name="MLTheme.PupopMenu" parent="@style/ThemeOverlay.AppCompat">
+    <style name="MLTheme.PopupOverlay" parent="@style/ThemeOverlay.AppCompat.Light">
         <!--设置菜单项文字的背景-->
         <!--<item name="android:background">@drawable/ml_popup_backaground</item>-->
         <!--弹出菜单背景颜色-->
-        <item name="android:colorBackground">@color/ml_white_87</item>
+        <!--<item name="android:colorBackground">@color/ml_white_87</item>-->
         <!--弹出菜单项的背景设置 主要是为了添加点击效果-->
-        <item name="android:itemBackground">@drawable/ml_click_rectangle_white</item>
+        <!--<item name="android:itemBackground">@drawable/ml_click_rectangle_white</item>-->
+        <!--设置弹出 PopupWindow 背景 这里使用了系统的资源 好像无效-->
+        <!--<item name="android:popupBackground">@drawable/abc_popup_background_mtrl_mult</item>-->
         <!--弹出菜单的文字颜色和大小-->
         <item name="android:textColor">@color/ml_black_87</item>
         <item name="android:textSize">@dimen/ml_size_16</item>
     </style>
 
-    <!--自定义 Toolbar 样式-->
-    <style name="MLTheme.Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <!--Toolbar字体颜色-->
-        <item name="colorControlNormal">@color/ml_white_100</item>
-        <item name="android:textColor">@color/ml_white_100</item>
-        <item name="android:textSize">@dimen/ml_size_18</item>
-        <item name="android:textStyle">normal</item>
-    </style>
-    <!--自定义 TabLayout 的字体样式-->
-    <style name="MLCustomTabTextAppearance" parent="TextAppearance.Design.Tab"></style>
 
-    <!--搜索界面 Activity 主题-->
-    <style name="MLTheme.Search" parent="MLTheme.Default">
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="autoCompleteTextViewStyle">@style/MLTheme.Widget.Search.AutoCompleteTextView
-        </item>
-        <item name="searchViewStyle">@style/MLTheme.Widget.SearchView</item>
-        <item name="colorControlNormal">@color/ml_black_54</item>
-        <item name="colorControlActivated">@color/ml_theme_accent</item>
+    <!--自定义弹出框样式-->
+    <style name="MLTheme.Light.Dialog" parent="Theme.AppCompat.Dialog">
+        <item name="colorAccent">@color/ml_orange_87</item>
+        <item name="android:textColorPrimary">@color/ml_blue_87</item>
+        <item name="android:background">@color/ml_white_100</item>
+    </style>
+    <!--自定义弹出框样式-->
+    <style name="MLTheme.DialogOverlay" parent="Theme.AppCompat.Dialog">
+        <item name="colorAccent">@color/ml_theme_accent</item>
+        <item name="android:textColorPrimary">@color/ml_theme_primary_dark</item>
+        <item name="android:background">@color/ml_theme_background</item>
+        <!--<item name="android:colorBackground">@color/ml_transparent</item>-->
     </style>
 
-    <!--搜索框的样式-->
-    <style name="MLTheme.Widget.SearchView" parent="Widget.AppCompat.SearchView">
-        <item name="searchHintIcon">@null</item>
-        <item name="searchIcon">@null</item>
-        <item name="queryBackground">@null</item>
-        <item name="submitBackground">@null</item>
-    </style>
-
-    <!--搜索控件中显示自动提示内容 TextView 控件的样式-->
-    <style name="MLTheme.Widget.Search.AutoCompleteTextView" parent="Widget.AppCompat.Light.AutoCompleteTextView">
-        <item name="android:textColorHint">@color/ml_black_87</item>
-        <!-- If set to @null the cursor will be displayed using android:textColor -->
-        <item name="android:textCursorDrawable">@null</item>
-    </style>
-
-    <style name="MLTheme.Default.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
-
-    <style name="MLTheme.Default.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 </resources>

@@ -2,19 +2,48 @@
 <manifest package="net.melove.demo.design"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.READ_USER_DICTIONARY"/>
+
+    <!-- 项目权限配置 -->
+    <!-- 相机 -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <!-- 网络 -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- 录音 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <!-- 震动 -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <!-- 访问网络状态 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!-- 访问WIFI状态 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <!-- 读取手机状态 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <!--唤醒锁屏-->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <!-- 写入外部存储 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <!-- 访问精确定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <!-- 修改音频设置 -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <!-- 允许读写系统设置项 使用设置时需要 -->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <!--读取用户字典-->
+    <uses-permission android:name="android.permission.READ_USER_DICTIONARY"/>
+
 
     <application
+        android:name=".application.MLApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="@string/ml_app_name"
         android:supportsRtl="true"
         android:theme="@style/MLTheme.Default">
+
+        <!-- 主界面 -->
         <activity
             android:name=".main.MLMainActivity"
-            android:label="@string/app_name"
+            android:label="@string/ml_app_name"
             android:theme="@style/MLTheme.Default">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -22,11 +51,31 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <!-- 图片剪切界面 -->
+        <activity android:name=".clipphoto.MLClipPhotoActivity"/>
+
+        <!-- 测试 ContentProvider 界面 -->
+        <activity
+            android:name=".contentprovider.MLCPActivity"
+            android:theme="@style/MLTheme.Default"/>
+        <!-- ContetnProvider的提供者 -->
+        <provider
+            android:name=".contentprovider.MLContentProvider"
+            android:authorities="net.melove.demo.design.contentprovider"/>
+
+        <!-- 测试文件相关界面 -->
+        <activity android:name=".file.MLFileActivity"/>
+
+        <!-- 解析HTML界面 -->
+        <activity android:name=".parsehtml.MLParseEmojiActivity"/>
+        <activity android:name=".parsehtml.MLParseHtmlActivity"/>
+
+        <!-- 搜索界面 -->
         <activity
             android:name=".search.MLSearchActivity"
             android:exported="false"
-            android:launchMode="singleTop"
-            android:theme="@style/MLTheme.Search">
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH"/>
             </intent-filter>
@@ -35,23 +84,13 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable"/>
         </activity>
-        <activity
-            android:name=".contentprovider.MLCPActivity"
-            android:theme="@style/MLTheme.Default"/>
 
-        <provider
-            android:name=".contentprovider.MLContentProvider"
-            android:authorities="net.melove.demo.design.contentprovider"/>
+        <!-- 测试播放音效界面 -->
+        <activity android:name=".sound.MLSoundActivity"/>
 
-        <activity android:name=".clipphoto.MLClipPhotoActivity"/>
-        <activity
-            android:name=".test.MLTestThemeActivity"
-            android:label="@string/title_activity_mltest_theme"
-            android:parentActivityName=".bases.MLBaseActivity"
-            android:theme="@style/MLTheme.Default">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".bases.MLBaseActivity"/>
+        <!-- 测试主题界面 -->
+        <activity android:name=".test.MLTestThemeActivity"/>
+        <activity android:name=".waveform.MLWaveformActivity">
         </activity>
     </application>
 

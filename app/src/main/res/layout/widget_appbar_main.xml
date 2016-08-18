@@ -1,39 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layout_coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center_horizontal">
+    android:fitsSystemWindows="true"
+    tools:context=".main.MLMainActivity">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/layout_appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        android:theme="@style/MLTheme.AppBarOverlay">
+        android:theme="@style/MLTheme.AppBarOverlay"
+        app:elevation="@dimen/ml_dimen_0">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/widget_toolbar"
+            android:id="@+id/ml_widget_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/MLTheme.PupopMenu">
+            android:background="?attr/colorPrimary"
+            app:elevation="@dimen/ml_dimen_0"
+            app:popupTheme="@style/MLTheme.PopupOverlay"
+            app:theme="@style/MLTheme.ToolbarOverlay"/>
 
-        </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
         android:id="@+id/ml_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    </FrameLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/btn_fab"
+        android:id="@+id/ml_btn_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/ml_dimen_16"
-        android:src="@mipmap/ic_mode_edit_white_24dp" />
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@mipmap/ic_add_white_24dp"
+        app:fabSize="normal"/>
+
 </android.support.design.widget.CoordinatorLayout>
