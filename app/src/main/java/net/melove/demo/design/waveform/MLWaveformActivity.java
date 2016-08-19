@@ -23,6 +23,7 @@ public class MLWaveformActivity extends MLBaseActivity {
     private Visualizer mVisualizer;
 
     private MLLineIndicatorView mLineIndicatorView;
+    private MLRecordView mRecordView;
 
     // 媒体录影机，可以录制音频和视频
     private MediaRecorder mMediaRecorder;
@@ -71,6 +72,7 @@ public class MLWaveformActivity extends MLBaseActivity {
         mStartRecordBtn.setOnClickListener(viewListener);
         mStopRecordBtn.setOnClickListener(viewListener);
 
+        mRecordView = (MLRecordView) findViewById(R.id.ml_view_record);
 
         mLineIndicatorView = (MLLineIndicatorView) findViewById(R.id.ml_view_lineindicator);
         mLineIndicatorView.setContent("100", "left 100", "120", "right 120");
@@ -143,6 +145,7 @@ public class MLWaveformActivity extends MLBaseActivity {
             mMediaRecorder.start();
             // 检测麦克风声音大小
             onWaveform();
+            mRecordView.startRecord();
             mStartTime = MLDateUtil.getCurrentMillisecond();
             MLLog.i("开始录制 %s", MLDateUtil.long2DateTime(mStartTime));
         } catch (IOException e) {
@@ -159,6 +162,7 @@ public class MLWaveformActivity extends MLBaseActivity {
         int duration = (int) ((mEndTime - mStartTime) / 1000);
         // 停止录制，修改录制状态为 false
         isRecording = false;
+        mRecordView.stopRecord();
         // 清除定时器任务
         if (mTimer != null) {
             mTimer.cancel();
