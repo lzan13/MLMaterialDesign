@@ -19,7 +19,14 @@
         android:layout_height="wrap_content"
         android:text="Stop Record"/>
 
+    <net.melove.demo.design.waveform.MLLineIndicatorView
+        android:id="@+id/ml_view_lineindicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/ml_dimen_8"/>
+
     <net.melove.demo.design.waveform.MLRecordView
+        android:id="@+id/ml_view_record"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </LinearLayout>

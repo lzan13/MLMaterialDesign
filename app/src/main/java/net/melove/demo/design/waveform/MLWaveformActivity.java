@@ -22,6 +22,8 @@ public class MLWaveformActivity extends MLBaseActivity {
     // 音频信息可视化类
     private Visualizer mVisualizer;
 
+    private MLLineIndicatorView mLineIndicatorView;
+
     // 媒体录影机，可以录制音频和视频
     private MediaRecorder mMediaRecorder;
 
@@ -68,6 +70,12 @@ public class MLWaveformActivity extends MLBaseActivity {
 
         mStartRecordBtn.setOnClickListener(viewListener);
         mStopRecordBtn.setOnClickListener(viewListener);
+
+
+        mLineIndicatorView = (MLLineIndicatorView) findViewById(R.id.ml_view_lineindicator);
+        mLineIndicatorView.setContent("100", "left 100", "120", "right 120");
+        mLineIndicatorView.setIndicator(100, 200, 50);
+        mLineIndicatorView.setProgress(50);
     }
 
     /**
