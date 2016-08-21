@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import net.melove.demo.design.R;
+import net.melove.demo.design.utils.MLDateUtil;
 import net.melove.demo.design.utils.MLDimenUtil;
 import net.melove.demo.design.utils.MLLog;
 
@@ -27,28 +28,43 @@ public class MLRecordView extends View {
 
     // 定时器
     private Timer mTimer;
-    private int time = 0;
+    // 录制开始时间
+    private long startTime = 0L;
+    // 录制持续时间
+    private long recordTime = 0L;
 
-    // 控件画笔
-    private Paint mPaint;
     // 控件边界，就是大小
     private RectF mBounds;
-
     // 控件宽高
     private float mWidth;
     private float mHeight;
+
+    // 录制触摸区域画笔
+    private Paint mPaint;
+
     // 控件宽高比
     private float ratio;
-    // 录制触摸区域半径
-    private float radius;
-    private int circleColor = 0x892384fe;
+    // 触摸区域颜色
+    private int touchColor = 0xdd2384fe;
 
-    // 波形宽度
+    // 录制触摸区域半径
+    private float mDialRadius;
+    // 波形刻度宽度
     private float dialWidth;
-    // 波形间隔宽度
+    // 波形刻度间隔宽度
     private float dialInterval;
-    // 波形颜色
-    private int dialColor = 0xddff5722;
+    // 波形刻度颜色
+    private int dialColor = 0x89ff5722;
+
+    // 指示器颜色
+    private int indicatorColor = 0xdde62f17;
+    // 指示器大小
+    private int indicatorRadius;
+
+    // 文字颜色
+    private int textColor = 0xdd212121;
+    private int textSize = MLDimenUtil.dp2px(R.dimen.ml_size_14);
+    private String timeText = "00:00";
 
 
     public MLRecordView(Context context) {
@@ -83,38 +99,74 @@ public class MLRecordView extends View {
         mTimer = new Timer();
         // 初始化自定义控件的宽高比
         ratio = 360.0f / 56.0f;
-        radius = MLDimenUtil.dp2px(R.dimen.ml_dimen_56);
+        mDialRadius = MLDimenUtil.dp2px(R.dimen.ml_dimen_56) / 2;
+
+        // 波形刻度相关参数
         dialInterval = MLDimenUtil.dp2px(R.dimen.ml_dimen_1);
         dialWidth = MLDimenUtil.dp2px(R.dimen.ml_dimen_2);
+
+        // 指示器相关参数
+        indicatorRadius = MLDimenUtil.dp2px(R.dimen.ml_dimen_8);
+
+        // 实例化画笔
+        mPaint = new Paint();
+        // 设置抗锯齿
+        mPaint.setAntiAlias(true);
+        // 设置画笔线条结尾样式
+        mPaint.setStrokeCap(Paint.Cap.ROUND);
 
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-        // 实例化画笔
-        mPaint = new Paint();
-        // 设置抗锯齿
-        mPaint.setAntiAlias(true);
-        // 设置画笔结束处样式
-        mPaint.setStrokeCap(Paint.Cap.ROUND);
-        // 设置画笔宽度
-        mPaint.setStrokeWidth(dialWidth);
-
+        // 绘制触摸区域
         drawCircle(canvas);
-
+        // 绘制波形刻度部分
         drawWaveform(canvas);
+        // 绘制指示器
+        drawIndicator(canvas);
+        // 绘制文字
+        drawTimeText(canvas);
+    }
+
+    /**
+     * 画文字
+     *
+     * @param canvas
+     */
+    private void drawTimeText(Canvas canvas) {
+        mPaint.setColor(textColor);
+        mPaint.setTextSize(textSize);
+
+        float textWidth = mPaint.measureText(timeText);
+        canvas.drawText(timeText, mHeight / 2 + textWidth / 2, mHeight / 2 + textSize / 2, mPaint);
+    }
+
+    /**
+     * 绘制指示器
+     *
+     * @param canvas
+     */
+    private void drawIndicator(Canvas canvas) {
+        // 设置画笔模式
+        mPaint.setStyle(Paint.Style.FILL);
+        // 设置画笔颜色
+        mPaint.setColor(indicatorColor);
+
+        canvas.drawCircle(mHeight / 2, mHeight / 2, indicatorRadius, mPaint);
     }
 
     /**
      * 绘制波形
      */
     private void drawWaveform(Canvas canvas) {
-        // 设置画笔颜色
-        mPaint.setColor(dialColor);
         // 设置画笔模式
         mPaint.setStyle(Paint.Style.STROKE);
+        // 设置画笔宽度
+        mPaint.setStrokeWidth(dialWidth);
+        // 设置画笔颜色
+        mPaint.setColor(dialColor);
         int count = (int) (mWidth / 2 / (dialWidth + dialInterval));
         for (int i = 0; i < count; i++) {
             float startX = mWidth / 4 + i * (dialInterval + dialWidth);
@@ -127,11 +179,13 @@ public class MLRecordView extends View {
      * 绘制触摸时圆形区域
      */
     private void drawCircle(Canvas canvas) {
+        // 设置画笔模式
         mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setColor(circleColor);
-        float cx = mWidth / 2;
+        // 设置画笔颜色
+        mPaint.setColor(touchColor);
+        float cx = mWidth - mDialRadius;
         float cy = mHeight / 2;
-        canvas.drawCircle(cx, cy, radius, mPaint);
+        canvas.drawCircle(cx, cy, mDialRadius, mPaint);
     }
 
 
@@ -143,42 +197,11 @@ public class MLRecordView extends View {
         mWidth = mBounds.right - mBounds.left;
         mHeight = mBounds.bottom - mBounds.top;
 
-        if (mWidth > mHeight) {
-            radius = mHeight / 3;
-        } else {
-            radius = mWidth / 3;
-        }
-    }
-
-    public void startRecord() {
-        // 判断定时器是否存在
-        if (mTimer == null) {
-            mTimer = new Timer();
-        } else {
-            // 清除定时器任务
-            mTimer.purge();
-        }
-        // 创建定时器任务
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                time++;
-                postInvalidate();
-            }
-        };
-        // 开启定时器，并设置定时任务间隔时间
-        mTimer.schedule(task, 500, 360);
-    }
-
-    public void stopRecord() {
-        // 清除定时器任务
-        if (mTimer != null) {
-            mTimer.cancel();
-            mTimer.purge();
-            mTimer = null;
-        }
-        time = 0;
-        postInvalidate();
+        //        if (mWidth > mHeight) {
+        //            mDialRadius = mHeight / 3;
+        //        } else {
+        //            mDialRadius = mWidth / 3;
+        //        }
     }
 
     @Override
@@ -229,6 +252,53 @@ public class MLRecordView extends View {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
+    }
+
+    /**
+     * 开始录制
+     */
+    public MLRecordManager.MLRecordError startRecord(String path) {
+        // 调用录制系统开始录制音频
+        MLRecordManager.MLRecordError recordError = MLRecordManager.getInstance().startRecordVoice(path);
+        if (recordError != MLRecordManager.MLRecordError.ERROR_NONE) {
+            return recordError;
+        }
+        // 判断定时器是否存在
+        if (mTimer == null) {
+            mTimer = new Timer();
+        } else {
+            // 清除定时器任务
+            mTimer.purge();
+        }
+        // 创建定时器任务
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                recordTime = MLDateUtil.getCurrentMillisecond() - startTime;
+                double decibel = MLRecordManager.getInstance().getVoiceDecibel();
+                MLLog.i("麦克风监听声音分贝：%g", decibel);
+                postInvalidate();
+            }
+        };
+        // 开启定时器，并设置定时任务间隔时间
+        mTimer.schedule(task, 500, 500);
+        return recordError;
+    }
+
+    /**
+     * 停止录制
+     */
+    public MLRecordManager.MLRecordError stopRecord() {
+        // 调用录制系统停止录制方法
+        MLRecordManager.MLRecordError recordError = MLRecordManager.getInstance().stopRecordVoice();
+        // 清除定时器任务
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer.purge();
+            mTimer = null;
+        }
+        postInvalidate();
+        return recordError;
     }
 
 

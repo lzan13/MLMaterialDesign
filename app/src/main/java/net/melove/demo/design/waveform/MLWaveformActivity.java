@@ -57,7 +57,6 @@ public class MLWaveformActivity extends MLBaseActivity {
 
         initView();
 
-        startVisualizerListener();
     }
 
     /**
@@ -73,11 +72,6 @@ public class MLWaveformActivity extends MLBaseActivity {
         mStopRecordBtn.setOnClickListener(viewListener);
 
         mRecordView = (MLRecordView) findViewById(R.id.ml_view_record);
-
-        mLineIndicatorView = (MLLineIndicatorView) findViewById(R.id.ml_view_lineindicator);
-        mLineIndicatorView.setContent("100", "left 100", "120", "right 120");
-        mLineIndicatorView.setIndicator(100, 200, 50);
-        mLineIndicatorView.setProgress(50);
     }
 
     /**
@@ -110,47 +104,9 @@ public class MLWaveformActivity extends MLBaseActivity {
      */
     private void startRecordVoice() {
         String voicePath = MLFileUtil.getFilesFromSDCard() + MLDateUtil.getDateTimeNoSpacing() + ".amr";
-        try {
-            // 判断媒体录影机是否释放，没有则释放
-            if (mMediaRecorder != null) {
-                mMediaRecorder.release();
-                mMediaRecorder = null;
-            }
-            // 实例化媒体录影机
-            mMediaRecorder = new MediaRecorder();
-            // 设置音频源为麦克风
-            mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            /**
-             * 设置音频文件编码格式，这里设置默认
-             * https://developer.android.com/reference/android/media/MediaRecorder.AudioEncoder.html
-             */
-            mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
-            /**
-             * 设置音频文件输出格式
-             * https://developer.android.com/reference/android/media/MediaRecorder.OutputFormat.html
-             */
-            mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-            // 设置录音最大持续时间
-            mMediaRecorder.setMaxDuration(maxDuration);
-            // 设置音频采样率
-            mMediaRecorder.setAudioSamplingRate(samplingRate);
-            // 设置音频编码比特率
-            mMediaRecorder.setAudioEncodingBitRate(encodingBitRate);
-            // 设置输出文件路径
-            mMediaRecorder.setOutputFile(voicePath);
-
-            // 准备录制
-            mMediaRecorder.prepare();
-            // 开始录制
-            mMediaRecorder.start();
-            // 检测麦克风声音大小
-            onWaveform();
-            mRecordView.startRecord();
-            mStartTime = MLDateUtil.getCurrentMillisecond();
-            MLLog.i("开始录制 %s", MLDateUtil.long2DateTime(mStartTime));
-        } catch (IOException e) {
-            MLLog.e("录影机准备失败 %s", e.getMessage());
-            e.printStackTrace();
+        MLRecordManager.MLRecordError recordError = mRecordView.startRecord(voicePath);
+        if (recordError == MLRecordManager.MLRecordError.ERROR_NONE) {
+            isRecording = true;
         }
     }
 
@@ -158,60 +114,9 @@ public class MLWaveformActivity extends MLBaseActivity {
      * 停止录音
      */
     private void stopRecordVoice() {
-        mEndTime = MLDateUtil.getCurrentMillisecond();
-        int duration = (int) ((mEndTime - mStartTime) / 1000);
-        // 停止录制，修改录制状态为 false
-        isRecording = false;
         mRecordView.stopRecord();
-        // 清除定时器任务
-        if (mTimer != null) {
-            mTimer.cancel();
-            mTimer.purge();
-            mTimer = null;
-        }
-        // 释放媒体录影机
-        if (mMediaRecorder != null) {
-            MLLog.i("停止录制 %s, 录音时长：%d", MLDateUtil.long2DateTime(mEndTime), duration);
-            // 停止录制
-            mMediaRecorder.stop();
-            // 重置媒体录影机
-            mMediaRecorder.reset();
-            // 释放媒体录影机
-            mMediaRecorder.release();
-            mMediaRecorder = null;
-        }
-    }
-
-    private void onWaveform() {
-        isRecording = true;
-        // 判断定时器是否存在
-        if (mTimer == null) {
-            mTimer = new Timer();
-        } else {
-            // 清除定时器任务
-            mTimer.purge();
-        }
-        // 创建定时器任务
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                if (mMediaRecorder != null) {
-                    double ratio = mMediaRecorder.getMaxAmplitude();
-                    double decibel = 0;
-                    if (ratio > 1) {
-                        // 根据麦克风采集到的声音振幅计算声音分贝大小
-                        decibel = 20 * Math.log10(ratio);
-                    }
-                    MLLog.i("麦克风监听声音分贝：%g", decibel);
-                }
-            }
-        };
-        // 开启定时器，并设置定时任务间隔时间
-        mTimer.schedule(task, 500, 1000);
+        isRecording = false;
     }
 
 
-    private void startVisualizerListener() {
-
-    }
 }

@@ -315,6 +315,7 @@ public class MLFileUtil {
     /**
      * 获取 /mnt/sdcard/Android/data/packagename/files 目录
      * getExternalFilesDir()方法的参数表示子目录的名字，如果为null，就是 files 根目录
+     * 如果参数不为 null 就是表示子目录的名字
      *
      * @return 返回得到的路径
      */
