@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:melove="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,33 +9,20 @@
     android:orientation="vertical"
     tools:context="net.melove.demo.design.waveform.MLWaveformActivity">
 
-    <Button
-        android:id="@+id/ml_btn_start_record"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Start Record"/>
-
-    <Button
-        android:id="@+id/ml_btn_stop_record"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Stop Record"/>
-
-    <net.melove.demo.design.waveform.MLLineIndicatorView
-        android:id="@+id/ml_view_lineindicator"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/ml_dimen_8"/>
-
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clipChildren="false">
 
         <net.melove.demo.design.waveform.MLRecordView
             android:id="@+id/ml_view_record"
             android:layout_width="match_parent"
             android:layout_height="@dimen/ml_dimen_56"
             android:layout_alignParentBottom="true"
-            android:background="@color/ml_black_12"/>
+            android:background="@color/ml_black_12"
+            android:clipChildren="false"
+            melove:ml_touch_color="@color/ml_red_87"
+            melove:ml_touch_icon="@mipmap/ic_call_white_24dp"
+            melove:ml_touch_radius="@dimen/ml_dimen_56"/>
     </RelativeLayout>
 </LinearLayout>

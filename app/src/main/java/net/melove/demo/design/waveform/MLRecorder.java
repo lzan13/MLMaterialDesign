@@ -13,10 +13,16 @@ import java.util.Timer;
  * Created by lz on 2016/8/20.
  * 定义的录音功能单例类，主要处理录音的相关操作
  */
-public class MLRecordManager {
+public class MLRecorder {
+    public static final int ERROR_NONE = 0;     // 没有错误
+    public static final int ERROR_SYSTEM = 1;   // 系统错误
+    public static final int ERROR_FAILED = 2;   // 录制失败
+    public static final int ERROR_RECORDING = 3;// 正在录制
+    public static final int ERROR_CANCEL = 4;   // 录音取消
+    public static final int ERROR_SHORT = 5;    // 录音时间过短
 
     // 单例类的实例
-    private static MLRecordManager instance;
+    private static MLRecorder instance;
 
     // 媒体录影机，可以录制音频和视频
     private MediaRecorder mMediaRecorder;
@@ -31,22 +37,13 @@ public class MLRecordManager {
     // 音频编码比特率
     private int encodingBitRate = 64;
 
-    // 定时器，用来定时检测麦克风大小
-    private Timer mTimer;
-    // 录制系统当前状态
-    private MLRecordStatus recordStatus;
-
-    // 录制开始时间
-    private long mStartTime = 0L;
-    // 录制结束时间
-    private long mEndTime = 0L;
+    // 录音机是否工作中
+    private boolean isRecording = false;
 
     /**
      * 单例类的私有构造方法
      */
-    private MLRecordManager() {
-        // 初始化录制系统为空闲状态
-        recordStatus = MLRecordStatus.RECORD_IDLE;
+    private MLRecorder() {
     }
 
     /**
@@ -54,9 +51,9 @@ public class MLRecordManager {
      *
      * @return
      */
-    public static MLRecordManager getInstance() {
+    public static MLRecorder getInstance() {
         if (instance == null) {
-            instance = new MLRecordManager();
+            instance = new MLRecorder();
         }
         return instance;
     }
@@ -71,7 +68,15 @@ public class MLRecordManager {
     }
 
     /**
-     * -------------------------------------- record vocie start -----------------------------------
+     * 返回录制的语音文件路径
+     *
+     * @return
+     */
+    public String getRecordFilePath() {
+        return recordFilePath;
+    }
+
+    /**
      * 初始化录制音频
      */
     public void initVoiceRecorder() {
@@ -100,10 +105,10 @@ public class MLRecordManager {
     /**
      * 开始录制声音文件
      */
-    public MLRecordError startRecordVoice(String path) {
+    public int startRecordVoice(String path) {
         // 判断录制系统是否空闲
-        if (recordStatus != MLRecordStatus.RECORD_IDLE) {
-            return MLRecordError.ERROR_RECORDING;
+        if (isRecording) {
+            return ERROR_RECORDING;
         }
         if (path == null || path.equals("")) {
             // 这里默认保存在 /sdcard/android/data/packagename/files/下
@@ -113,7 +118,7 @@ public class MLRecordManager {
         }
 
         // 设置为录制音频中
-        recordStatus = MLRecordStatus.RECORD_VOICE;
+        isRecording = true;
         // 判断媒体录影机是否释放，没有则释放
         if (mMediaRecorder != null) {
             mMediaRecorder.release();
@@ -130,20 +135,20 @@ public class MLRecordManager {
             mMediaRecorder.prepare();
             // 开始录制
             mMediaRecorder.start();
-            MLLog.i("开始录制");
         } catch (IOException e) {
             MLLog.e("录影机准备失败 %s", e.getMessage());
             e.printStackTrace();
-            return MLRecordError.ERROR_SYSTEM;
+            return ERROR_SYSTEM;
         }
-        return MLRecordError.ERROR_NONE;
+        return ERROR_NONE;
     }
 
     /**
      * 停止录音
      */
-    public MLRecordError stopRecordVoice() {
-        recordStatus = MLRecordStatus.RECORD_IDLE;
+    public int stopRecordVoice() {
+        // 停止录音，将录音状态设置为false
+        isRecording = false;
         // 释放媒体录影机
         if (mMediaRecorder != null) {
             // 停止录制
@@ -156,80 +161,61 @@ public class MLRecordManager {
         }
         // 根据录制结果判断录音是否成功
         if (MLFileUtil.isFileExists(recordFilePath)) {
-            return MLRecordError.ERROR_FAILED;
+            return ERROR_FAILED;
         }
-        return MLRecordError.ERROR_NONE;
-    }
-    /**
-     * ===================================== record voice end ======================================
-     */
-
-    /**
-     * -------------------------------------- record video start -----------------------------------
-     * TODO 录制视频功能，待实现
-     * 初始化录制视频
-     */
-    public void initVideoRecorder() {
-
+        return ERROR_NONE;
     }
 
     /**
-     * 开始录制视频文件
+     * 取消录音
+     *
+     * @return
      */
-    public void startRecordVideo(String path) {
-        // 判断录制系统是否空闲
-        if (recordStatus != MLRecordStatus.RECORD_IDLE) {
-            return;
+    public int cancelRecordVoice() {
+        // 停止录音，将录音状态设置为false
+        isRecording = false;
+        // 释放媒体录影机
+        if (mMediaRecorder != null) {
+            // 停止录制
+            mMediaRecorder.stop();
+            // 重置媒体录影机
+            mMediaRecorder.reset();
+            // 释放媒体录影机
+            mMediaRecorder.release();
+            mMediaRecorder = null;
         }
-        if (path == null || path.equals("")) {
-            // 这里默认保存在 /sdcard/android/data/packagename/files/下
-            recordFilePath = MLFileUtil.getFilesFromSDCard() + MLDateUtil.getCurrentMillisecond() + ".mp4";
-        } else {
-            recordFilePath = path;
+        // 根据录制结果判断录音是否成功
+        if (MLFileUtil.isFileExists(recordFilePath)) {
+            MLFileUtil.deleteFile(recordFilePath);
         }
-        // 设置为录制视频中
-        recordStatus = MLRecordStatus.RECORD_VIDEO;
+        return ERROR_CANCEL;
     }
-    /**
-     * ===================================== record video end ======================================
-     */
-
 
     /**
      * 获取声音分贝信息
      *
      * @return
      */
-    public double getVoiceDecibel() {
+    public int getVoiceWaveform() {
         if (mMediaRecorder != null) {
-            double ratio = mMediaRecorder.getMaxAmplitude();
-            double decibel = 0;
+            int ratio = mMediaRecorder.getMaxAmplitude();
+            int waveform = 0;
             if (ratio > 1) {
                 // 根据麦克风采集到的声音振幅计算声音分贝大小
-                decibel = 20 * Math.log10(ratio);
+                waveform = ratio * 6 / 0x7FFF;
             }
-            return decibel;
+            return waveform;
         }
         return 0;
     }
 
     /**
-     * 录制系统当前状态
+     * 录音机是否正在录制中
+     *
+     * @return
      */
-    public enum MLRecordStatus {
-        RECORD_IDLE,    // 空闲
-        RECORD_VOICE,   // 录制音频中
-        RECORD_VIDEO;   // 录制视频中
-    }
-
-    /**
-     * 录制系统使用错误码
-     */
-    public enum MLRecordError {
-        ERROR_NONE,         // 没有错误
-        ERROR_SYSTEM,       // 系统错误
-        ERROR_FAILED,       // 录制失败
-        ERROR_RECORDING;    // 正在录制
+    public boolean isRecording() {
+        return isRecording;
     }
 
 }

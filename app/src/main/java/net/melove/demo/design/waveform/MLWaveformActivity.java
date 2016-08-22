@@ -10,12 +10,9 @@ import net.melove.demo.design.R;
 import net.melove.demo.design.application.MLBaseActivity;
 import net.melove.demo.design.utils.MLDateUtil;
 import net.melove.demo.design.utils.MLFileUtil;
-import net.melove.demo.design.utils.MLLog;
 import net.melove.demo.design.widget.MLToast;
 
-import java.io.IOException;
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class MLWaveformActivity extends MLBaseActivity {
 
@@ -65,58 +62,25 @@ public class MLWaveformActivity extends MLBaseActivity {
     private void initView() {
         mActivity = this;
 
-        mStartRecordBtn = (Button) findViewById(R.id.ml_btn_start_record);
-        mStopRecordBtn = (Button) findViewById(R.id.ml_btn_stop_record);
-
-        mStartRecordBtn.setOnClickListener(viewListener);
-        mStopRecordBtn.setOnClickListener(viewListener);
-
         mRecordView = (MLRecordView) findViewById(R.id.ml_view_record);
+        mRecordView.setRecordCallback(callback);
     }
 
-    /**
-     * 界面控件点击监听
-     */
-    private View.OnClickListener viewListener = new View.OnClickListener() {
+    private MLRecordView.MLRecordCallback callback = new MLRecordView.MLRecordCallback() {
         @Override
-        public void onClick(View view) {
-            switch (view.getId()) {
-            case R.id.ml_btn_start_record:
-                if (isRecording) {
-                    MLToast.makeToast("正在录制").show();
-                } else {
-                    startRecordVoice();
-                }
-                break;
-            case R.id.ml_btn_stop_record:
-                if (!isRecording) {
-                    MLToast.makeToast("还没开始录制").show();
-                } else {
-                    stopRecordVoice();
-                }
-                break;
-            }
+        public void onCancel() {
+            
+        }
+
+        @Override
+        public void onFailed(int error) {
+
+        }
+
+        @Override
+        public void onSuccess(String path) {
+
         }
     };
-
-    /**
-     * 开始录音
-     */
-    private void startRecordVoice() {
-        String voicePath = MLFileUtil.getFilesFromSDCard() + MLDateUtil.getDateTimeNoSpacing() + ".amr";
-        MLRecordManager.MLRecordError recordError = mRecordView.startRecord(voicePath);
-        if (recordError == MLRecordManager.MLRecordError.ERROR_NONE) {
-            isRecording = true;
-        }
-    }
-
-    /**
-     * 停止录音
-     */
-    private void stopRecordVoice() {
-        mRecordView.stopRecord();
-        isRecording = false;
-    }
-
 
 }
