@@ -2,6 +2,7 @@ package net.melove.demo.design.utils;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.TypedValue;
 import android.view.Display;
@@ -148,20 +149,70 @@ public class MLDimenUtil {
     }
 
     /**
-     * 将dp类尺寸转换为px尺寸
+     * 将控件尺寸的资源转换为像素尺寸
      *
-     * @param id
+     * @param id 尺寸资源id
      * @return
      */
-    public static int dp2px(int id) {
+    public static int getDimenPixel(int id) {
         Resources res = MLApplication.getContext().getResources();
         int result = res.getDimensionPixelSize(id);
         return result;
     }
 
-    public static int dip2px(int dip) {
+    /**
+     * 将控件尺寸大小转为当前设备下的像素大小
+     *
+     * @param dp 控件尺寸大小
+     * @return
+     */
+    public static int dp2px(int dp) {
         Resources res = MLApplication.getContext().getResources();
         float density = res.getDisplayMetrics().density;
-        return (int) (dip * density * 0.5f);
+        return (int) (dp * density + 0.5f);
+    }
+
+    /**
+     * 将字体尺寸大小转为当前设备下的像素尺寸大小
+     *
+     * @param sp 字体的尺寸大小
+     * @return
+     */
+    public static float sp2px(int sp) {
+        Resources res = MLApplication.getContext().getResources();
+        float density = res.getDisplayMetrics().scaledDensity;
+        return (int) (sp * density + 0.5f);
+    }
+
+    /**
+     * 获取文字的宽度
+     *
+     * @param paint 绘制文字的画笔
+     * @param str   需要计算宽度的字符串
+     * @return 返回字符串宽度
+     */
+    public static float getTextWidth(Paint paint, String str) {
+        float textWidth = 0;
+        if (str != null && str.length() > 0) {
+            // 记录字符串中每个字符宽度的数组
+            float[] widths = new float[str.length()];
+            // 获取字符串中每个字符的宽度到数组
+            paint.getTextWidths(str, widths);
+            for (int i = 0; i < str.length(); i++) {
+                textWidth += (float) Math.ceil(widths[i]);
+            }
+        }
+        return textWidth;
+    }
+
+    /**
+     * 计算文字的高度
+     *
+     * @param paint 绘制文字的画笔
+     * @return 返回字符串高度
+     */
+    public static float getTextHeight(Paint paint) {
+        Paint.FontMetrics fm = paint.getFontMetrics();
+        return (float) Math.ceil(fm.descent - fm.ascent);
     }
 }

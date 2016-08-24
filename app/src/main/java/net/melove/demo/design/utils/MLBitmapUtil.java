@@ -26,7 +26,7 @@ public class MLBitmapUtil {
      * @param bitmap 需要转为Base64 字符串的Bitmap对象
      * @return 返回转换后的字符串
      */
-    public static String bitmp2String(Bitmap bitmap) {
+    public static String bitmap2String(Bitmap bitmap) {
         String result = null;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);

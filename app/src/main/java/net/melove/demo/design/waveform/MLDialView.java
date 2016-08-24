@@ -42,13 +42,13 @@ public class MLDialView extends View {
 
 
     // 刻度盘大刻度和小刻度
-    private float smallDialLenght = MLDimenUtil.dp2px(R.dimen.ml_dimen_8);
-    private float largeDialLenght = MLDimenUtil.dp2px(R.dimen.ml_dimen_16);
+    private float smallDialLenght = MLDimenUtil.getDimenPixel(R.dimen.ml_dimen_8);
+    private float largeDialLenght = MLDimenUtil.getDimenPixel(R.dimen.ml_dimen_16);
     // 刻度盘刻度的宽度
-    private float dialWidth = MLDimenUtil.dp2px(R.dimen.ml_dimen_2);
+    private float dialWidth = MLDimenUtil.getDimenPixel(R.dimen.ml_dimen_2);
     // 刻度盘文字大小
-    private float dialTextSize = MLDimenUtil.dp2px(R.dimen.ml_size_14);
-    private float dialPointer = MLDimenUtil.dp2px(R.dimen.ml_dimen_96);
+    private float dialTextSize = MLDimenUtil.getDimenPixel(R.dimen.ml_size_14);
+    private float dialPointer = MLDimenUtil.getDimenPixel(R.dimen.ml_dimen_96);
 
     // 半径
     private float mRadius;

@@ -1,28 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:melove="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/ml_theme_background"
+    android:clipChildren="false"
     android:orientation="vertical"
     tools:context="net.melove.demo.design.waveform.MLWaveformActivity">
 
-    <RelativeLayout
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/bg_top_gril"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ml_dimen_48"
+        android:layout_alignParentBottom="true"
         android:clipChildren="false">
+
+        <ImageButton
+            android:id="@+id/ml_btn_test_record"
+            android:layout_width="@dimen/ml_dimen_48"
+            android:layout_height="@dimen/ml_dimen_48"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/ic_send_white_24dp"/>
 
         <net.melove.demo.design.waveform.MLRecordView
             android:id="@+id/ml_view_record"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/ml_dimen_56"
+            android:layout_height="@dimen/ml_dimen_48"
             android:layout_alignParentBottom="true"
-            android:background="@color/ml_black_12"
             android:clipChildren="false"
+            android:visibility="gone"
             melove:ml_touch_color="@color/ml_red_87"
-            melove:ml_touch_icon="@mipmap/ic_call_white_24dp"
-            melove:ml_touch_radius="@dimen/ml_dimen_56"/>
+            melove:ml_touch_icon="@mipmap/ic_mic_white_24dp"
+            melove:ml_touch_size="@dimen/ml_dimen_48"
+            melove:ml_touch_text="滑动取消"/>
     </RelativeLayout>
-</LinearLayout>
+</RelativeLayout>

@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    compileSdkVersion 23
+    buildToolsVersion '24.0.1'
     defaultConfig {
         applicationId "net.melove.demo.design"
         minSdkVersion 15
@@ -26,9 +26,9 @@ dependencies {
     // compile 'com.android.support:support-v4:24.1.1'
     // compile 'com.android.support:appcompat-v7:24.1.1'
     // android Material Design 设计风格库，包含v7/v4/recyclerview/annotations/vector/等库
-    compile 'com.android.support:design:24.1.1'
+    compile 'com.android.support:design:23.3.0'
     // CardView 卡片风格控件库
-    compile 'com.android.support:cardview-v7:24.1.1'
+    compile 'com.android.support:cardview-v7:23.3.0'
     // Google Play Service 库，使用GCM推送需要
     //    compile "com.google.android.gms:play-services-gcm:8.4.0"
     // 解析Html代码库
@@ -37,7 +37,6 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     // LeakCanary 发版的库
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-
     // 观察者模式解耦库
     compile 'org.greenrobot:eventbus:3.0.0'
 }

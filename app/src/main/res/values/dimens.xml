@@ -28,6 +28,7 @@
     <dimen name="ml_dimen_48">48dp</dimen>
     <dimen name="ml_dimen_52">52dp</dimen>
     <dimen name="ml_dimen_56">56dp</dimen>
+    <dimen name="ml_dimen_64">64dp</dimen>
     <dimen name="ml_dimen_72">72dp</dimen>
     <dimen name="ml_dimen_84">84dp</dimen>
     <dimen name="ml_dimen_96">96dp</dimen>

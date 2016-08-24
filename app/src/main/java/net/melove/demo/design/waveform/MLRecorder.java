@@ -26,19 +26,21 @@ public class MLRecorder {
 
     // 媒体录影机，可以录制音频和视频
     private MediaRecorder mMediaRecorder;
+    // 计算分贝基准值
+    protected int decibelBase = 200;
 
     // 录制文件保存路径
-    private String recordFilePath;
+    protected String recordFilePath;
 
     // 录音最大持续时间 10 分钟
-    private int maxDuration = 10 * 60 * 1000;
+    protected int maxDuration = 10 * 60 * 1000;
     // 音频采样率 单位 Hz
-    private int samplingRate = 8000;
+    protected int samplingRate = 8000;
     // 音频编码比特率
-    private int encodingBitRate = 64;
+    protected int encodingBitRate = 64;
 
     // 录音机是否工作中
-    private boolean isRecording = false;
+    protected boolean isRecording = false;
 
     /**
      * 单例类的私有构造方法
@@ -56,15 +58,6 @@ public class MLRecorder {
             instance = new MLRecorder();
         }
         return instance;
-    }
-
-    /**
-     * 自定义设置录制文件保存路径，一定要设置在{start}方法之前，否则设置无效
-     *
-     * @param path
-     */
-    public void setRecordFilePath(String path) {
-        recordFilePath = path;
     }
 
     /**
@@ -151,8 +144,18 @@ public class MLRecorder {
         isRecording = false;
         // 释放媒体录影机
         if (mMediaRecorder != null) {
-            // 停止录制
-            mMediaRecorder.stop();
+            // 防止录音机 start 后马上调用 stop 出现异常
+            //            mMediaRecorder.setOnErrorListener(null);
+            try {
+                // 停止录制
+                mMediaRecorder.stop();
+            } catch (IllegalStateException e) {
+                MLLog.e(e.getMessage());
+            } catch (RuntimeException e) {
+                MLLog.i("停止录音失败，停止方法出现异常");
+                MLLog.e(e.getMessage());
+                return ERROR_SYSTEM;
+            }
             // 重置媒体录影机
             mMediaRecorder.reset();
             // 释放媒体录影机
@@ -160,9 +163,11 @@ public class MLRecorder {
             mMediaRecorder = null;
         }
         // 根据录制结果判断录音是否成功
-        if (MLFileUtil.isFileExists(recordFilePath)) {
+        if (!MLFileUtil.isFileExists(recordFilePath)) {
+            MLLog.i("停止录音完成，录音失败，无录音文件");
             return ERROR_FAILED;
         }
+        MLLog.i("停止录音完成，无错误");
         return ERROR_NONE;
     }
 
@@ -176,8 +181,16 @@ public class MLRecorder {
         isRecording = false;
         // 释放媒体录影机
         if (mMediaRecorder != null) {
-            // 停止录制
-            mMediaRecorder.stop();
+            try {
+                // 停止录制
+                mMediaRecorder.stop();
+            } catch (IllegalStateException e) {
+                MLLog.e(e.getMessage());
+            } catch (RuntimeException e) {
+                MLLog.i("停止录音失败，停止方法出现异常");
+                MLLog.e(e.getMessage());
+                return ERROR_SYSTEM;
+            }
             // 重置媒体录影机
             mMediaRecorder.reset();
             // 释放媒体录影机
@@ -188,6 +201,7 @@ public class MLRecorder {
         if (MLFileUtil.isFileExists(recordFilePath)) {
             MLFileUtil.deleteFile(recordFilePath);
         }
+        MLLog.i("取消录音完成，无错误");
         return ERROR_CANCEL;
     }
 
@@ -197,16 +211,23 @@ public class MLRecorder {
      * @return
      */
     public int getVoiceWaveform() {
+        int waveform = 1;
         if (mMediaRecorder != null) {
-            int ratio = mMediaRecorder.getMaxAmplitude();
-            int waveform = 0;
-            if (ratio > 1) {
-                // 根据麦克风采集到的声音振幅计算声音分贝大小
-                waveform = ratio * 6 / 0x7FFF;
+            int ratio = 0;
+            try {
+                ratio = mMediaRecorder.getMaxAmplitude() / decibelBase;
+                MLLog.d("声音大小" + ratio);
+            } catch (IllegalStateException e) {
+                MLLog.e(e.getMessage());
+            } catch (RuntimeException e) {
+                MLLog.e(e.getMessage());
             }
-            return waveform;
+            if (ratio > 0) {
+                // 根据麦克风采集到的声音振幅计算声音分贝大小
+                waveform = (int) (20 * Math.log10(ratio)) / 10;
+            }
         }
-        return 0;
+        return waveform;
     }
 
     /**

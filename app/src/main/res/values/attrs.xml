@@ -33,7 +33,9 @@
         <!--触摸区域图标资源-->
         <attr name="ml_touch_icon" format="reference"/>
         <!--触摸区域半径-->
-        <attr name="ml_touch_radius" format="dimension"/>
+        <attr name="ml_touch_size" format="dimension"/>
+        <!--触摸区域提示文字-->
+        <attr name="ml_touch_text" format="string|reference"/>
         <!--波形刻度颜色-->
         <attr name="ml_waveform_color" format="color"/>
         <!--波形刻度间隔距离-->
@@ -43,7 +45,7 @@
         <!--录制指示器颜色-->
         <attr name="ml_indicator_color" format="color"/>
         <!--录制指示器大小-->
-        <attr name="ml_indicator_radius" format="dimension"/>
+        <attr name="ml_indicator_size" format="dimension"/>
         <!--文字颜色-->
         <attr name="ml_text_color" format="color"/>
         <!--文字大小-->
