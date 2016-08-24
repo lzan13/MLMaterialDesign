@@ -55,7 +55,7 @@ public class MLRecordView extends View {
     // 录制开始时间
     protected long startTime = 0L;
     // 录制持续时间
-    protected long recordTime = 0L;
+    protected int recordTime = 0;
 
     // 触摸区域滑动提示图标
     protected String touchIconStr = "iVBORw0KGgoAAAANSUhEUgAAAD8AAAA/CAYAAABXXxDfAAAABHNCSVQICAgIfAhkiAAAA+9JREFU\n" +
@@ -286,19 +286,19 @@ public class MLRecordView extends View {
             textPaint.setStrokeWidth(1);
             textPaint.setTextSize(textSize);
             String timeText = "";
-            int minute = (int) (recordTime / 1000 / 60);
+            int minute = recordTime / 1000 / 60;
             if (minute < 10) {
                 timeText = "0" + minute;
             } else {
                 timeText = "" + minute;
             }
-            int seconds = (int) (recordTime / 1000 % 60);
+            int seconds = recordTime / 1000 % 60;
             if (seconds < 10) {
                 timeText = timeText + ":0" + seconds;
             } else {
                 timeText = timeText + ":" + seconds;
             }
-            int millisecond = (int) (recordTime % 1000 / 100);
+            int millisecond = recordTime % 1000 / 100;
             timeText = timeText + "." + millisecond;
             float textWidth = textPaint.measureText(timeText);
             canvas.drawText(timeText, viewHeight / 2 + textWidth / 2, viewHeight / 2 + textSize / 3, textPaint);
@@ -377,7 +377,7 @@ public class MLRecordView extends View {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        recordTime = MLDateUtil.getCurrentMillisecond() - startTime;
+                        recordTime = getRecordTime();
                         int decibel = MLRecorder.getInstance().getVoiceWaveform();
                         waveformList.addFirst(decibel);
                         // MLLog.i("麦克风监听声音分贝：%d", decibel);
@@ -410,14 +410,14 @@ public class MLRecordView extends View {
         // 停止录制，清除集合
         waveformList.clear();
         // 计算录制时间
-        recordTime = MLDateUtil.getCurrentMillisecond() - startTime;
+        recordTime = getRecordTime();
         if (mRecordCallback != null) {
             if (recordTime < 1000) {
                 // 录制时间太短
                 mRecordCallback.onFailed(MLRecorder.ERROR_SHORT);
             } else if (recordError == MLRecorder.ERROR_NONE) {
                 // 录音成功
-                mRecordCallback.onSuccess(MLRecorder.getInstance().getRecordFilePath());
+                mRecordCallback.onSuccess(MLRecorder.getInstance().getRecordFilePath(), recordTime);
             } else if (recordError == MLRecorder.ERROR_FAILED) {
                 // 录音失败
                 mRecordCallback.onFailed(recordError);
@@ -426,7 +426,7 @@ public class MLRecordView extends View {
                 mRecordCallback.onFailed(recordError);
             }
         }
-        recordTime = 0L;
+        recordTime = 0;
         // 刷新UI
         postInvalidate();
     }
@@ -447,9 +447,16 @@ public class MLRecordView extends View {
 
             }
         }
-        recordTime = 0L;
+        recordTime = 0;
         postInvalidate();
     }
+
+    /**
+     * 获取录音持续时间
+     *
+     * @return
+     */
+    private int getRecordTime() {return (int) (MLDateUtil.getCurrentMillisecond() - startTime);}
 
     /**
      * 重写 onTouchEvent 监听方法，用来响应控件触摸
@@ -589,7 +596,7 @@ public class MLRecordView extends View {
         /**
          * 录音失败
          *
-         * @param error
+         * @param error 失败的错误信息
          */
         public void onFailed(int error);
 
@@ -601,9 +608,10 @@ public class MLRecordView extends View {
         /**
          * 录音成功
          *
-         * @param path
+         * @param path 录音文件的路径
+         * @param time 录音时长
          */
-        public void onSuccess(String path);
+        public void onSuccess(String path, int time);
 
     }
 
