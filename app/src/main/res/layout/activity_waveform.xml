@@ -16,18 +16,18 @@
         android:scaleType="centerCrop"
         android:src="@mipmap/bg_top_gril"/>
 
+    <net.melove.demo.design.waveform.MLWaveformView
+        android:id="@+id/ml_view_waveform"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ml_dimen_192"
+        android:background="@color/ml_white_54"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/ml_dimen_48"
         android:layout_alignParentBottom="true"
+        android:background="@color/ml_white_87"
         android:clipChildren="false">
-
-        <ImageButton
-            android:id="@+id/ml_btn_test_record"
-            android:layout_width="@dimen/ml_dimen_48"
-            android:layout_height="@dimen/ml_dimen_48"
-            android:layout_alignParentRight="true"
-            android:src="@mipmap/ic_send_white_24dp"/>
 
         <net.melove.demo.design.waveform.MLRecordView
             android:id="@+id/ml_view_record"
@@ -35,7 +35,7 @@
             android:layout_height="@dimen/ml_dimen_48"
             android:layout_alignParentBottom="true"
             android:clipChildren="false"
-            android:visibility="gone"
+            android:visibility="visible"
             melove:ml_touch_color="@color/ml_red_87"
             melove:ml_touch_icon="@mipmap/ic_mic_white_24dp"
             melove:ml_touch_size="@dimen/ml_dimen_48"
