@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import net.melove.demo.design.R;
 import net.melove.demo.design.application.MLBaseActivity;
+import net.melove.demo.design.utils.MLLog;
 
 public class MLWaveformActivity extends MLBaseActivity {
 
@@ -30,7 +31,8 @@ public class MLWaveformActivity extends MLBaseActivity {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         // Create the MediaPlayer
-        mMediaPlayer = MediaPlayer.create(this, R.raw.ml_xw_cjdn);
+        mMediaPlayer = MediaPlayer.create(this, R.raw.ml_call_incoming);
+        mMediaPlayer.setLooping(true);
 
         setupVisualizerFxAndUI();
 
@@ -45,19 +47,21 @@ public class MLWaveformActivity extends MLBaseActivity {
             }
         });
 
-        mMediaPlayer.start();
     }
 
     private void setupVisualizerFxAndUI() {
+        // 实例化可视化观察器，参数为 MediaPlayer 将要播放的音频ID
         mVisualizer = new Visualizer(mMediaPlayer.getAudioSessionId());
-        mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
+        // 设置捕获大小
+        mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[0]);
         mVisualizer.setDataCaptureListener(new Visualizer.OnDataCaptureListener() {
             public void onWaveFormDataCapture(Visualizer visualizer, byte[] bytes, int samplingRate) {
-                mWaveformView.updateByte(bytes);
+                mWaveformView.updateByte(bytes, mMediaPlayer.getCurrentPosition());
+                MLLog.i("bytes.lenght:%d, position:%d, duration:%d", bytes.length, mMediaPlayer.getCurrentPosition(), mMediaPlayer.getDuration());
             }
 
             public void onFftDataCapture(Visualizer visualizer, byte[] bytes, int samplingRate) {}
-        }, Visualizer.getMaxCaptureRate() / 2, true, false);
+        }, Visualizer.getMaxCaptureRate() / 4, true, false);
     }
 
     /**
@@ -67,14 +71,37 @@ public class MLWaveformActivity extends MLBaseActivity {
         mActivity = this;
 
         mWaveformView = (MLWaveformView) findViewById(R.id.ml_view_waveform);
+        mWaveformView.setWaveformCallback(waveformCallback);
 
 
         mRecordView = (MLRecordView) findViewById(R.id.ml_view_record);
-        mRecordView.setRecordCallback(callback);
+        mRecordView.setRecordCallback(recordCallback);
 
     }
 
-    private MLRecordView.MLRecordCallback callback = new MLRecordView.MLRecordCallback() {
+    private MLWaveformView.MLWaveformCallback waveformCallback = new MLWaveformView.MLWaveformCallback() {
+        @Override
+        public void onStart() {
+            mMediaPlayer.start();
+        }
+
+        @Override
+        public void onStop() {
+            mMediaPlayer.stop();
+        }
+
+        @Override
+        public void onDrag(int position) {
+
+        }
+
+        @Override
+        public void onError(int error) {
+
+        }
+    };
+
+    private MLRecordView.MLRecordCallback recordCallback = new MLRecordView.MLRecordCallback() {
         @Override
         public void onCancel() {
 

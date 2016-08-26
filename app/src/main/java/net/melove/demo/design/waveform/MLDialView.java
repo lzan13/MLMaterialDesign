@@ -126,7 +126,7 @@ public class MLDialView extends View {
                 mPaint.setStrokeWidth(dialWidth);
                 mPaint.setColor(0xddd22a14);
                 canvas.drawLine(mWidth / 2, mHeight / 2 - mRadius, mWidth / 2, mHeight / 2 - mRadius - largeDialLenght, mPaint);
-                //                canvas.drawText(text, mWidth / 2, mHeight / 2 - mRadius + largeDialLenght, mPaint);
+                //                canvas.drawText(text, mWidth / 2, mHeight / 2 - mRadius + largeDialLenght, wavefomrPaint);
             } else {
                 mPaint.setStrokeWidth(dialWidth);
                 mPaint.setColor(0xdd212121);
