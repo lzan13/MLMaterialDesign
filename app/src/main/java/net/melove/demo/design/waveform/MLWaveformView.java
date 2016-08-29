@@ -40,7 +40,7 @@ public class MLWaveformView extends View {
     protected float viewHeight;
 
     // 波形部分画笔
-    protected Paint wavefomrPaint;
+    protected Paint waveformPaint;
     // 触摸部分画笔
     protected Paint touchPaint;
 
@@ -76,8 +76,9 @@ public class MLWaveformView extends View {
     }
 
     public MLWaveformView(Context context, AttributeSet attrs, int defStyleAttr) {
-        this(context, attrs, defStyleAttr, 0);
-
+        super(context, attrs, defStyleAttr);
+        mContext = context;
+        init(attrs);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -95,35 +96,44 @@ public class MLWaveformView extends View {
         waveformBytes = null;
 
         // 初始化画笔
-        wavefomrPaint = new Paint();
+        waveformPaint = new Paint();
         // 设置画笔抗锯齿
-        wavefomrPaint.setAntiAlias(true);
+        waveformPaint.setAntiAlias(true);
 
         // 从前边的画笔创建新的画笔
-        touchPaint = new Paint(wavefomrPaint);
+        touchPaint = new Paint(waveformPaint);
 
         // 波形部分默认参数
         waveformColor = 0xddff5722;
-        waveformInterval = MLDimenUtil.getDimenPixel(R.dimen.ml_dimen_1);
+        waveformInterval = MLDimenUtil.getDimenPixel(R.dimen.ml_dimen_0_5);
         waveformWidth = MLDimenUtil.getDimenPixel(R.dimen.ml_dimen_2);
 
         // 触摸部分默认参数
-        touchColor = 0xdd039e00;
+        touchColor = 0x89ff5722;
         touchIcon = R.mipmap.ic_play_arrow_white_24dp;
-        touchSize = MLDimenUtil.getDimenPixel(R.dimen.ml_dimen_36);
+        touchSize = MLDimenUtil.getDimenPixel(R.dimen.ml_dimen_32);
 
     }
 
     /**
-     * 更新采集的数据源
+     * 更新 FFT 频域数据
      *
-     * @param bytes    采集到的声音信息
-     * @param position 当前进度
+     * @param bytes    采集到的数据信息
+     * @param position 音源当前播放位置
      */
-    public void updateByte(byte[] bytes, int position) {
-        // 这里把采集到的声音信息元数据直接设置给字节数组，元数据取值范围在 -127 至 127 之间
+    public void updateFFTDate(byte[] bytes, int position) {
         waveformBytes = bytes;
+        invalidate();
+    }
 
+    /**
+     * 更新波形数据
+     *
+     * @param bytes    采集到的数据信息
+     * @param position 音源当前播放位置
+     */
+    public void updateWaveformData(byte[] bytes, int position) {
+        waveformBytes = bytes;
         invalidate();
     }
 
@@ -143,10 +153,10 @@ public class MLWaveformView extends View {
      */
     protected void drawTouchIcon(Canvas canvas) {
         touchPaint.setColor(touchColor);
-        canvas.drawCircle(viewWidth / 2, viewHeight / 2, touchSize / 2, touchPaint);
+        canvas.drawCircle(touchCenterX, touchCenterY, touchSize / 2, touchPaint);
 
         Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), touchIcon);
-        canvas.drawBitmap(bitmap, viewWidth / 2 - bitmap.getWidth() / 2, viewHeight / 2 - bitmap.getHeight() / 2, touchPaint);
+        canvas.drawBitmap(bitmap, touchCenterX - bitmap.getWidth() / 2, touchCenterY - bitmap.getHeight() / 2, touchPaint);
     }
 
     /**
@@ -155,13 +165,22 @@ public class MLWaveformView extends View {
      * @param canvas 当前控件的画布
      */
     private void drawWaveform(Canvas canvas) {
+        // 设置画笔颜色
+        waveformPaint.setColor(waveformColor);
+        // 设置画笔宽度
+        waveformPaint.setStrokeWidth(waveformWidth / 2);
+        // 设置画笔末尾样式
+        waveformPaint.setStrokeCap(Paint.Cap.ROUND);
+        // 画一条基准线
+        canvas.drawLine(touchCenterX, touchCenterY, viewWidth, touchCenterY, waveformPaint);
+
+        // 波形数据如果为 null 直接 return
         if (waveformBytes == null) {
             return;
         }
 
-        // 设置画笔颜色
-        wavefomrPaint.setColor(waveformColor);
-        wavefomrPaint.setStrokeWidth(waveformWidth);
+        // 设置波形宽度
+        waveformPaint.setStrokeWidth(waveformWidth);
 
         if (waveformPoints == null || waveformPoints.length < waveformBytes.length * 4) {
             waveformPoints = new float[waveformBytes.length * 4];
@@ -173,18 +192,18 @@ public class MLWaveformView extends View {
         float interval = viewWidth / waveformBytes.length;
 
         for (int i = 0; i < waveformBytes.length - 1; i++) {
-            waveformPoints[i * 4] = baseX + i * interval;
-            waveformPoints[i * 4 + 1] = baseY;
-            waveformPoints[i * 4 + 2] = baseX + i * interval;
-
             float waveform = ((byte) (waveformBytes[i] + 128)) * (viewHeight / 2) / 128;
-            if (waveform > 0) {
-                waveformPoints[i * 4 + 3] = baseY - waveform;
+
+            waveformPoints[4 * i] = baseX + i * interval;
+            waveformPoints[4 * i + 1] = baseY;
+            waveformPoints[4 * i + 2] = baseX + i * interval;
+            if (waveform < 0) {
+                waveformPoints[4 * i + 3] = baseY + waveform;
             } else {
-                waveformPoints[i * 4 + 3] = baseY + waveform;
+                waveformPoints[4 * i + 3] = baseY - waveform * 2;
             }
         }
-        canvas.drawLines(waveformPoints, wavefomrPaint);
+        canvas.drawLines(waveformPoints, waveformPaint);
     }
 
     @Override
@@ -195,7 +214,7 @@ public class MLWaveformView extends View {
         viewWidth = viewBounds.right - viewBounds.left;
         viewHeight = viewBounds.bottom - viewBounds.top;
 
-        touchCenterX = 0;
+        touchCenterX = 0 + touchSize / 2;
         touchCenterY = viewHeight;
     }
 
@@ -207,14 +226,14 @@ public class MLWaveformView extends View {
         switch (event.getAction()) {
         case MotionEvent.ACTION_DOWN:
             // 判断按下的位置是不是在触摸区域
-            if (x < viewWidth / 2 - touchSize / 2 || x > viewWidth / 2 + touchSize / 2
-                    || y < viewHeight / 2 - touchSize / 2 || y > viewHeight / 2 + touchSize / 2) {
+            if (x < touchCenterX - touchSize / 2 || x > touchCenterX + touchSize / 2
+                    || y < touchCenterY - touchSize / 2 || y > touchCenterY + touchSize / 2) {
                 return false;
             }
             isTouch = true;
             // 设置画笔透明度
             touchPaint.setAlpha(128);
-            postInvalidate();
+            invalidate();
             break;
         case MotionEvent.ACTION_UP:
             if (isTouch) {
