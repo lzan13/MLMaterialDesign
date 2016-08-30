@@ -2,6 +2,7 @@ package net.melove.demo.design.waveform;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -26,6 +27,11 @@ public class MLWaveformView extends View {
 
     protected MLWaveformCallback mWaveformCallback;
 
+    // 是否在触摸区域
+    protected boolean isTouch = false;
+    // 是否正在播放
+    protected boolean isPlay = false;
+
     // 点坐标集合，四个一组
     protected float[] waveformPoints;
     // 采集到的声音信息
@@ -43,30 +49,36 @@ public class MLWaveformView extends View {
     protected Paint waveformPaint;
     // 触摸部分画笔
     protected Paint touchPaint;
-
-    // 波形刻度颜色
-    protected int waveformColor;
-    // 波形间隔
-    protected float waveformInterval;
-    // 波形宽度
-    protected float waveformWidth;
+    // 文字画笔
+    protected Paint textPaint;
 
     // 触摸部分颜色
     protected int touchColor;
     // 触摸部分图标
-    protected int touchIcon;
+    protected int touchIconActive;
+    protected int touchIconNormal;
     // 触摸部分大小
-    protected float touchSize;
+    protected int touchSize;
     // 触摸区域中心坐标
     protected float touchCenterX;
     protected float touchCenterY;
 
-    // 是否在触摸区域
-    protected boolean isTouch = false;
-    // 是否正在播放
-    protected boolean isPlay = false;
+    // 时间字符内容
+    protected String textTime;
+
+    // 波形刻度颜色
+    protected int waveformColor;
+    // 波形间隔
+    protected int waveformInterval;
+    // 波形宽度
+    protected int waveformWidth;
 
 
+    /**
+     * 构造方法
+     *
+     * @param context
+     */
     public MLWaveformView(Context context) {
         this(context, null);
     }
@@ -95,6 +107,36 @@ public class MLWaveformView extends View {
 
         waveformBytes = null;
 
+        // 波形部分默认参数
+        waveformColor = 0xddff5722;
+        waveformInterval = MLDimenUtil.getDimenPixel(R.dimen.ml_dimen_1);
+        waveformWidth = MLDimenUtil.getDimenPixel(R.dimen.ml_dimen_2);
+
+        // 触摸部分默认参数
+        touchColor = 0xddff5722;
+        touchIconActive = R.mipmap.ic_pause_white_24dp;
+        touchIconNormal = R.mipmap.ic_play_arrow_white_24dp;
+        touchSize = MLDimenUtil.getDimenPixel(R.dimen.ml_dimen_36);
+
+        textTime = "Time";
+
+        // 获取控件的属性值
+        if (attrs != null) {
+            TypedArray array = mContext.obtainStyledAttributes(attrs, R.styleable.MLWaveformView);
+            // 获取自定义属性值，如果没有设置就是默认值
+            touchColor = array.getColor(R.styleable.MLWaveformView_ml_waveform_touch_color, touchColor);
+            touchIconActive = array.getResourceId(R.styleable.MLWaveformView_ml_waveform_touch_icon_active, touchIconActive);
+            touchIconNormal = array.getResourceId(R.styleable.MLWaveformView_ml_waveform_touch_icon_normal, touchIconNormal);
+            touchSize = array.getDimensionPixelOffset(R.styleable.MLWaveformView_ml_waveform_touch_size, touchSize);
+
+            waveformColor = array.getColor(R.styleable.MLWaveformView_ml_waveform_waveform_color, waveformColor);
+            waveformInterval = array.getDimensionPixelOffset(R.styleable.MLWaveformView_ml_waveform_waveform_interval, waveformInterval);
+            waveformWidth = array.getDimensionPixelOffset(R.styleable.MLWaveformView_ml_waveform_waveform_width, waveformWidth);
+
+            // 回收资源
+            array.recycle();
+        }
+
         // 初始化画笔
         waveformPaint = new Paint();
         // 设置画笔抗锯齿
@@ -102,49 +144,38 @@ public class MLWaveformView extends View {
 
         // 从前边的画笔创建新的画笔
         touchPaint = new Paint(waveformPaint);
-
-        // 波形部分默认参数
-        waveformColor = 0xddff5722;
-        waveformInterval = MLDimenUtil.getDimenPixel(R.dimen.ml_dimen_0_5);
-        waveformWidth = MLDimenUtil.getDimenPixel(R.dimen.ml_dimen_2);
-
-        // 触摸部分默认参数
-        touchColor = 0x89ff5722;
-        touchIcon = R.mipmap.ic_play_arrow_white_24dp;
-        touchSize = MLDimenUtil.getDimenPixel(R.dimen.ml_dimen_32);
-
-    }
-
-    /**
-     * 更新 FFT 频域数据
-     *
-     * @param bytes    采集到的数据信息
-     * @param position 音源当前播放位置
-     */
-    public void updateFFTDate(byte[] bytes, int position) {
-        waveformBytes = bytes;
-        invalidate();
-    }
-
-    /**
-     * 更新波形数据
-     *
-     * @param bytes    采集到的数据信息
-     * @param position 音源当前播放位置
-     */
-    public void updateWaveformData(byte[] bytes, int position) {
-        waveformBytes = bytes;
-        invalidate();
+        textPaint = new Paint(waveformPaint);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        drawWaveform(canvas);
+        // 绘制波形
+        drawFFT(canvas);
 
+        // 绘制触摸区域部分
         drawTouchIcon(canvas);
+
+        // 绘制文字
+        drawText(canvas);
     }
+
+    /**
+     * 绘制文字
+     *
+     * @param canvas 当前控件画布
+     */
+    protected void drawText(Canvas canvas) {
+        textPaint.setTextSize(24);
+        textPaint.setColor(0xddffffff);
+        textPaint.setStrokeWidth(4);
+        float textWidth = MLDimenUtil.getTextWidth(textPaint, textTime);
+        float textHeight = MLDimenUtil.getTextHeight(textPaint);
+        canvas.drawText(textTime, viewWidth - textWidth, textHeight, textPaint);
+
+    }
+
 
     /**
      * 回执触摸图标
@@ -153,14 +184,60 @@ public class MLWaveformView extends View {
      */
     protected void drawTouchIcon(Canvas canvas) {
         touchPaint.setColor(touchColor);
+        // 绘制触摸区域圆形背景
         canvas.drawCircle(touchCenterX, touchCenterY, touchSize / 2, touchPaint);
 
-        Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), touchIcon);
+        Bitmap bitmap = null;
+        if (isPlay) {
+            bitmap = BitmapFactory.decodeResource(mContext.getResources(), touchIconActive);
+        } else {
+            bitmap = BitmapFactory.decodeResource(mContext.getResources(), touchIconNormal);
+        }
+        // 绘制触摸图标
         canvas.drawBitmap(bitmap, touchCenterX - bitmap.getWidth() / 2, touchCenterY - bitmap.getHeight() / 2, touchPaint);
     }
 
     /**
-     * 绘制波形
+     * 绘制频谱波形图
+     *
+     * @param canvas
+     */
+    private void drawFFT(Canvas canvas) {
+        // 设置画笔颜色
+        waveformPaint.setColor(waveformColor);
+        // 设置画笔末尾样式
+        waveformPaint.setStrokeCap(Paint.Cap.ROUND);
+        // 设置画笔宽度
+        waveformPaint.setStrokeWidth(waveformWidth / 2);
+
+        // 波形数据如果为 null 直接 return
+        if (waveformBytes == null) {
+            return;
+        }
+
+        if (waveformPoints == null || waveformPoints.length < waveformBytes.length * 4) {
+            waveformPoints = new float[waveformBytes.length * 4];
+        }
+        float baseX = touchSize;
+        float baseY = viewHeight / 2;
+        // 绘制时域型波形图
+        float interval = (viewWidth - touchSize) / (waveformBytes.length - 1);
+        for (int i = 0; i < waveformBytes.length - 1; i++) {
+            // 计算第i个点的x坐标
+            waveformPoints[i * 4] = baseX + i * interval;
+            // 根据bytes[i]的值（波形点的值）计算第i个点的y坐标
+            waveformPoints[i * 4 + 1] = baseY + ((byte) (waveformBytes[i] + 128)) * (viewHeight / 2) / 128;
+            // 计算第i+1个点的x坐标
+            waveformPoints[i * 4 + 2] = baseX + interval * (i + 1);
+            // 根据bytes[i+1]的值（波形点的值）计算第i+1个点的y坐标
+            waveformPoints[i * 4 + 3] = baseY + ((byte) (waveformBytes[i + 1] + 128)) * (viewHeight / 2) / 128;
+        }
+        canvas.drawLines(waveformPoints, waveformPaint);
+    }
+
+    /**
+     * 绘制树状波形
+     * TODO 由于采集数据频率以及数据大小，导致展示树状波形不是很理想，暂时不用
      *
      * @param canvas 当前控件的画布
      */
@@ -168,42 +245,40 @@ public class MLWaveformView extends View {
         // 设置画笔颜色
         waveformPaint.setColor(waveformColor);
         // 设置画笔宽度
-        waveformPaint.setStrokeWidth(waveformWidth / 2);
+        waveformPaint.setStrokeWidth(waveformWidth);
         // 设置画笔末尾样式
         waveformPaint.setStrokeCap(Paint.Cap.ROUND);
-        // 画一条基准线
-        canvas.drawLine(touchCenterX, touchCenterY, viewWidth, touchCenterY, waveformPaint);
+
+        int count = (int) ((viewWidth - touchSize) / (waveformInterval + waveformWidth));
+        canvas.drawLine(touchSize, viewHeight, viewWidth, viewHeight, waveformPaint);
 
         // 波形数据如果为 null 直接 return
         if (waveformBytes == null) {
             return;
         }
 
-        // 设置波形宽度
-        waveformPaint.setStrokeWidth(waveformWidth);
-
         if (waveformPoints == null || waveformPoints.length < waveformBytes.length * 4) {
             waveformPoints = new float[waveformBytes.length * 4];
         }
 
-        float baseX = viewWidth / waveformBytes.length;
+        float baseX = touchSize;
         float baseY = viewHeight;
 
-        float interval = viewWidth / waveformBytes.length;
-
-        for (int i = 0; i < waveformBytes.length - 1; i++) {
+        // 回执频域型波形图
+        for (int i = 0; i < count; i++) {
             float waveform = ((byte) (waveformBytes[i] + 128)) * (viewHeight / 2) / 128;
-
-            waveformPoints[4 * i] = baseX + i * interval;
+            waveformPoints[4 * i] = baseX + i * (waveformWidth + waveformInterval);
             waveformPoints[4 * i + 1] = baseY;
-            waveformPoints[4 * i + 2] = baseX + i * interval;
+            waveformPoints[4 * i + 2] = baseX + i * (waveformWidth + waveformInterval);
             if (waveform < 0) {
                 waveformPoints[4 * i + 3] = baseY + waveform;
             } else {
-                waveformPoints[4 * i + 3] = baseY - waveform * 2;
+                waveformPoints[4 * i + 3] = baseY - waveform;
             }
         }
         canvas.drawLines(waveformPoints, waveformPaint);
+
+
     }
 
     @Override
@@ -215,7 +290,7 @@ public class MLWaveformView extends View {
         viewHeight = viewBounds.bottom - viewBounds.top;
 
         touchCenterX = 0 + touchSize / 2;
-        touchCenterY = viewHeight;
+        touchCenterY = viewHeight / 2;
     }
 
     @Override
@@ -269,6 +344,28 @@ public class MLWaveformView extends View {
     private void stopPlay() {
         isPlay = false;
         mWaveformCallback.onStop();
+    }
+
+    /**
+     * 更新 FFT 频域数据
+     *
+     * @param bytes    采集到的数据信息
+     * @param position 音源当前播放位置
+     */
+    public void updateFFTData(byte[] bytes, int position) {
+        waveformBytes = bytes;
+        invalidate();
+    }
+
+    /**
+     * 更新波形数据
+     *
+     * @param bytes    采集到的数据信息
+     * @param position 音源当前播放位置
+     */
+    public void updateWaveformData(byte[] bytes, int position) {
+        waveformBytes = bytes;
+        invalidate();
     }
 
     /**

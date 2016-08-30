@@ -14,13 +14,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@mipmap/bg_top_gril"/>
+        android:src="@mipmap/bg_green"/>
 
+    <!--波形控件-->
     <net.melove.demo.design.waveform.MLWaveformView
         android:id="@+id/ml_view_waveform"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/ml_dimen_192"
-        android:background="@color/ml_white_54"/>
+        android:layout_width="@dimen/ml_dimen_264"
+        android:layout_height="@dimen/ml_dimen_48"
+        android:layout_centerInParent="true"
+        android:background="@color/ml_white_54"
+        melove:ml_waveform_touch_color="@color/ml_green_87"
+        melove:ml_waveform_touch_icon_active="@mipmap/ic_pause_white_24dp"
+        melove:ml_waveform_touch_icon_normal="@mipmap/ic_play_arrow_white_24dp"
+        melove:ml_waveform_touch_size="@dimen/ml_dimen_36"
+        melove:ml_waveform_waveform_color="@color/ml_orange_87"
+        melove:ml_waveform_waveform_width="@dimen/ml_dimen_2"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -28,7 +36,7 @@
         android:layout_alignParentBottom="true"
         android:background="@color/ml_white_87"
         android:clipChildren="false">
-
+        <!--录音控件-->
         <net.melove.demo.design.waveform.MLRecordView
             android:id="@+id/ml_view_record"
             android:layout_width="match_parent"
@@ -36,9 +44,9 @@
             android:layout_alignParentBottom="true"
             android:clipChildren="false"
             android:visibility="visible"
-            melove:ml_touch_color="@color/ml_red_87"
-            melove:ml_touch_icon="@mipmap/ic_mic_white_24dp"
-            melove:ml_touch_size="@dimen/ml_dimen_48"
-            melove:ml_touch_text="滑动取消"/>
+            melove:ml_record_touch_color="@color/ml_red_87"
+            melove:ml_record_touch_icon="@mipmap/ic_mic_white_24dp"
+            melove:ml_record_touch_size="@dimen/ml_dimen_48"
+            melove:ml_record_touch_text="滑动取消"/>
     </RelativeLayout>
 </RelativeLayout>

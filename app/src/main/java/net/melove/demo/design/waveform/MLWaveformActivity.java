@@ -31,7 +31,7 @@ public class MLWaveformActivity extends MLBaseActivity {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         // Create the MediaPlayer
-        mMediaPlayer = MediaPlayer.create(this, R.raw.ml_xw_cjdn);
+        mMediaPlayer = MediaPlayer.create(this, R.raw.ml_record_voice);
         // 设置是否循环播放 默认为 false
         mMediaPlayer.setLooping(true);
 
@@ -69,7 +69,7 @@ public class MLWaveformActivity extends MLBaseActivity {
         // 实例化可视化观察器，参数为 MediaPlayer 将要播放的音频ID
         mVisualizer = new Visualizer(mMediaPlayer.getAudioSessionId());
         // 设置捕获大小
-        mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[0]);
+        mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1] / 2);
         // 为 Visualizer 设置监听器
         /**
          * 这个监听又四个参数
@@ -93,7 +93,7 @@ public class MLWaveformActivity extends MLBaseActivity {
                     @Override
                     public void onFftDataCapture(Visualizer visualizer, byte[] fft, int samplingRate) {
                         // 用 FFT 频域傅里叶变换数据更新 mVisualizerView 组件
-                        mWaveformView.updateFFTDate(fft, mMediaPlayer.getCurrentPosition());
+                        mWaveformView.updateFFTData(fft, mMediaPlayer.getCurrentPosition());
                         MLLog.i("fft.lenght:%d, samplingRate:%d, position:%d, duration:%d",
                                 fft.length, samplingRate, mMediaPlayer.getCurrentPosition(), mMediaPlayer.getDuration());
                     }
@@ -114,7 +114,7 @@ public class MLWaveformActivity extends MLBaseActivity {
                     }
                 },
                 // 最大采样率
-                Visualizer.getMaxCaptureRate() / 3,
+                Visualizer.getMaxCaptureRate() / 2,
                 // 是否采集波形数据
                 true,
                 // 是否采集傅里叶变换数据
