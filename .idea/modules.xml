@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MLMaterialDesign.iml" filepath="$PROJECT_DIR$/MLMaterialDesign.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/javalibrary/javalibrary.iml" filepath="$PROJECT_DIR$/javalibrary/javalibrary.iml" />
     </modules>
   </component>
 </project>
