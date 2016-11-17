@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion '24.0.2'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId "net.melove.demo.design"
         minSdkVersion 15
@@ -10,18 +10,83 @@ android {
         versionCode 1
         versionName "1.0"
     }
-    buildTypes {
+
+    // 签名信息
+    signingConfigs {
+        // debug 打包签名信息
+        debug {
+            keyAlias 'debugKey'
+            keyPassword '123123'
+            storeFile file('debug-keystore.jks')
+            storePassword '123123'
+        }
+        //  release 打包签名信息，因为签名文件是保密信息，放在一个配置文件中进行读取，这个文件不会再版本库里存在
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            keyAlias keyAlias
+            keyPassword keyPassword
+            storeFile storeFile
+            storePassword storePassword
         }
     }
-    productFlavors {
-    }
+    // 获取打包编译配置信息
+    releaseConfigs();
 
+    // 编译配置
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-debug'
+            minifyEnabled false
+            zipAlignEnabled false
+        }
+        release {
+            // 是否开启压缩
+            zipAlignEnabled true
+            // 是否开启混淆
+            minifyEnabled true
+            // 打包时删除无用资源 依赖于混淆，必须和 minifyEnabled 一起使用
+            shrinkResources true
+            // 设置正式打包的签名
+            signingConfig signingConfigs.release
+            // 混淆文件
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            //修改生成的apk名字，格式为 app-版本号-打包时间-渠道名-release.apk
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def oldFile = output.outputFile
+                    if (variant.buildType.name.equals('release')) {
+                        def releaseApkName = "app-v${defaultConfig.versionName}-${releaseTime()}-" +
+                                variant.productFlavors[0].name +
+                                '-release.apk'
+                        output.outputFile = new File(oldFile.parent, releaseApkName)
+                    }
+                }
+            }
+        }
+    }
+    // 文件路径映射配置
+    //    sourceSets {
+    //        main {
+    //            // 设置Jni so文件路径 如果有jniLibs目录就不需要设置
+    //            jniLibs.srcDirs = ['libs']
+    //        }
+    //    }
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
+    }
+
+    productFlavors {
+        XiaoMi {
+            signingConfig signingConfigs.release
+            manifestPlaceholders = [ML_CHANNEL_ID: "XiaoMi"]
+        }
+        WanDouJia {
+            signingConfig signingConfigs.release
+            manifestPlaceholders = [ML_CHANNEL_ID: "WanDouJia"]
+        }
     }
 }
 
@@ -29,9 +94,9 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     // Android 官方提供低版本兼容库
     // android Material Design 设计风格库，包含v7/v4/recyclerview/annotations/vector/等库
-    compile 'com.android.support:design:24.2.0'
+    compile 'com.android.support:design:25.0.1'
     // CardView 卡片风格控件库
-    compile 'com.android.support:cardview-v7:24.2.0'
+    compile 'com.android.support:cardview-v7:25.0.1'
     // Google Play Service 库，使用GCM推送需要
     //    compile "com.google.android.gms:play-services-gcm:9.0.0"
     // 解析Html代码库
@@ -42,4 +107,40 @@ dependencies {
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
     // 观察者模式解耦库
     compile 'org.greenrobot:eventbus:3.0.0'
+}
+
+
+
+//读取配置文件
+def releaseConfigs() {
+    // 设置要读取的配置文件
+    def propFile = file('app-config.properties')
+    if (propFile.canRead()) {
+        def Properties props = new Properties()
+        props.load(new FileInputStream(propFile))
+        // 判断签名配置信息是否存在
+        if (props != null &&
+                props.containsKey('ML_KEY_ALIAS') &&
+                props.containsKey('ML_KEY_PASSWORD') &&
+                props.containsKey('ML_STORE_FILE') &&
+                props.containsKey('ML_STORE_PASSWORD')) {
+            android.signingConfigs.release.keyAlias = props['ML_KEY_ALIAS']
+            android.signingConfigs.release.keyPassword = props['ML_KEY_PASSWORD']
+            android.signingConfigs.release.storeFile = file(props['ML_STORE_FILE'])
+            android.signingConfigs.release.storePassword = props['ML_STORE_PASSWORD']
+        } else {
+            // 当配置文件签名项为空时，将 release 时的签名设置为null
+            println 'app-config.properties 找不到签名项，检查配置文件'
+            android.buildTypes.release.signingConfig = null
+        }
+    } else {
+        // 当配置文件为空时，将 release 时的签名设置为null
+        println 'app-config.properties 找不到配置文件'
+        android.buildTypes.release.signingConfig = null
+    }
+}
+
+// 获取当前系统时间
+def releaseTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
 }

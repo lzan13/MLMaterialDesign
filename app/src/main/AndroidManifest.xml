@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="net.melove.demo.design"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="net.melove.demo.design">
 
 
     <!-- 项目权限配置 -->
@@ -90,8 +90,12 @@
 
         <!-- 测试主题界面 -->
         <activity android:name=".test.MLTestThemeActivity"/>
-        <activity android:name=".waveform.MLWaveformActivity">
-        </activity>
+        <activity android:name=".waveform.MLWaveformActivity"/>
+
+        <!-- 设置多渠道打包的渠道名，ML_CHANNEL_ID 是渠道名占位符-->
+        <meta-data
+            android:name="TD_CHANNEL_ID"
+            android:value="${ML_CHANNEL_ID}"/>
     </application>
 
 </manifest>

@@ -1,1 +1,4 @@
 /build
+app-config.properties
+
+*.jks
