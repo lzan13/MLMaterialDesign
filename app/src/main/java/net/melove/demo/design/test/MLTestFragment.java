@@ -1,6 +1,5 @@
 package net.melove.demo.design.test;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,13 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import net.melove.demo.design.recycler.MLRecycerActivity;
 import net.melove.demo.design.R;
 import net.melove.demo.design.application.MLBaseFragment;
 import net.melove.demo.design.clipphoto.MLClipPhotoActivity;
 import net.melove.demo.design.utils.MLLog;
 import net.melove.demo.design.waveform.MLWaveformActivity;
 import net.melove.demo.design.widget.MLViewGroup;
-
 
 /**
  * 测试Fragment，
@@ -44,26 +43,23 @@ public class MLTestFragment extends MLBaseFragment {
         // Required empty public constructor
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_test, container, false);
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    @Override public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mActivity = getActivity();
         init();
     }
 
     private void init() {
-        String[] btns = {"test1", "录音控件", "图片剪切", "test3"};
+        String[] btns = { "test1", "录音控件", "图片剪切", "RecyclerView" };
         viewGroup = (MLViewGroup) getView().findViewById(R.id.ml_view_custom_viewgroup);
         for (int i = 0; i < btns.length; i++) {
             Button btn = new Button(mActivity);
@@ -72,13 +68,9 @@ public class MLTestFragment extends MLBaseFragment {
             btn.setOnClickListener(viewListener);
             viewGroup.addView(btn);
         }
-
-
     }
 
-
-    @Override
-    public void onAttach(Context context) {
+    @Override public void onAttach(Context context) {
         super.onAttach(context);
         try {
             mListener = (OnMLFragmentListener) context;
@@ -92,27 +84,21 @@ public class MLTestFragment extends MLBaseFragment {
      * 测试按钮的监听事件
      */
     private View.OnClickListener viewListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
+        @Override public void onClick(View v) {
             switch (v.getId()) {
-            case 100:
-                Intent intent = new Intent();
-                intent.setClass(mActivity, MLTestThemeActivity.class);
-                mActivity.startActivity(intent);
-                break;
-            case 101:
-                Intent recordIntent = new Intent();
-                recordIntent.setClass(mActivity, MLWaveformActivity.class);
-                mActivity.startActivity(recordIntent);
-                break;
-            case 102:
-                // 跳转到选择图片功能页
-                Intent clipIntent = new Intent();
-                clipIntent.setClass(mActivity, MLClipPhotoActivity.class);
-                mActivity.startActivity(clipIntent);
-                break;
-            case 103:
-                break;
+                case 100:
+                    mActivity.startActivity(new Intent(mActivity, MLTestThemeActivity.class));
+                    break;
+                case 101:
+                    mActivity.startActivity(new Intent(mActivity, MLWaveformActivity.class));
+                    break;
+                case 102:
+                    // 跳转到选择图片功能页
+                    mActivity.startActivity(new Intent(mActivity, MLClipPhotoActivity.class));
+                    break;
+                case 103:
+                    startActivity(new Intent(mActivity, MLRecycerActivity.class));
+                    break;
             }
         }
     };

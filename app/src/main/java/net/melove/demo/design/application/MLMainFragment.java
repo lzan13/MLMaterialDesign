@@ -1,4 +1,4 @@
-package net.melove.demo.design.main;
+package net.melove.demo.design.application;
 
 
 import android.os.Bundle;
@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import net.melove.demo.design.R;
-import net.melove.demo.design.application.MLBaseFragment;
 
 /**
  * 主界面 Fragment

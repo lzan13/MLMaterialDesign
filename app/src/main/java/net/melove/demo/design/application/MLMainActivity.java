@@ -1,4 +1,4 @@
-package net.melove.demo.design.main;
+package net.melove.demo.design.application;
 
 import android.annotation.TargetApi;
 import android.content.Intent;

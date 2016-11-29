@@ -42,7 +42,7 @@
 
         <!-- 主界面 -->
         <activity
-            android:name=".main.MLMainActivity"
+            android:name=".application.MLMainActivity"
             android:label="@string/ml_app_name"
             android:theme="@style/MLTheme.Default">
             <intent-filter>
@@ -54,7 +54,8 @@
 
         <!-- 图片剪切界面 -->
         <activity android:name=".clipphoto.MLClipPhotoActivity"/>
-
+        RecyclerView 界面
+        <activity android:name=".recycler.MLRecycerActivity"/>
         <!-- 测试 ContentProvider 界面 -->
         <activity
             android:name=".contentprovider.MLCPActivity"
@@ -91,6 +92,20 @@
         <!-- 测试主题界面 -->
         <activity android:name=".test.MLTestThemeActivity"/>
         <activity android:name=".waveform.MLWaveformActivity"/>
+
+        <!--Firebase token 更新处理服务-->
+        <service android:name=".firebase.MLFirebaseInstanceIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+        <!--Firebase 推送消息接收与处理服务-->
+        <service android:name=".firebase.MLFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
 
         <!-- 设置多渠道打包的渠道名，ML_CHANNEL_ID 是渠道名占位符-->
         <meta-data

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <net.melove.demo.design.widget.MLViewGroup
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:orientation="horizontal"
+        >
+        <EditText
+            android:id="@+id/ml_edit_position"
+            android:layout_width="64dp"
+            android:layout_height="48dp"
+            />
+        <Button
+            android:id="@+id/ml_btn_jump"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="跳转"
+            />
+        <Button
+            android:id="@+id/ml_btn_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="顶部"
+            />
+        <Button
+            android:id="@+id/ml_btn_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="底部"
+            />
+        <Button
+            android:id="@+id/ml_btn_add_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add UP"
+            />
+        <Button
+            android:id="@+id/ml_btn_add_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Bottom"
+            />
+
+    </net.melove.demo.design.widget.MLViewGroup>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/ml_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+</LinearLayout>
