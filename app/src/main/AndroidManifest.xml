@@ -93,6 +93,13 @@
         <activity android:name=".test.MLTestThemeActivity"/>
         <activity android:name=".waveform.MLWaveformActivity"/>
 
+        <!--测试懒加载 Fragment-->
+        <activity android:name=".fragment.MLFragmentActivity"/>
+
+        <!--测试自定义 PopupWindow-->
+        <activity android:name=".popupwindow.MLPopupWindowActivity"/>
+
+
         <!--Firebase token 更新处理服务-->
         <service android:name=".firebase.MLFirebaseInstanceIdService">
             <intent-filter>

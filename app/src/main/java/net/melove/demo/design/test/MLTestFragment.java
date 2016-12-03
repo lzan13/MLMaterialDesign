@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import net.melove.demo.design.fragment.MLFragmentActivity;
+import net.melove.demo.design.popupwindow.MLPopupWindowActivity;
 import net.melove.demo.design.recycler.MLRecycerActivity;
 import net.melove.demo.design.R;
 import net.melove.demo.design.application.MLBaseFragment;
@@ -59,7 +61,7 @@ public class MLTestFragment extends MLBaseFragment {
     }
 
     private void init() {
-        String[] btns = { "test1", "录音控件", "图片剪切", "RecyclerView" };
+        String[] btns = { "test1", "录音控件", "图片剪切", "RecyclerView", "Fragment", "Popup Window" };
         viewGroup = (MLViewGroup) getView().findViewById(R.id.ml_view_custom_viewgroup);
         for (int i = 0; i < btns.length; i++) {
             Button btn = new Button(mActivity);
@@ -98,6 +100,12 @@ public class MLTestFragment extends MLBaseFragment {
                     break;
                 case 103:
                     startActivity(new Intent(mActivity, MLRecycerActivity.class));
+                    break;
+                case 104:
+                    startActivity(new Intent(mActivity, MLFragmentActivity.class));
+                    break;
+                case 105:
+                    startActivity(new Intent(mActivity, MLPopupWindowActivity.class));
                     break;
             }
         }
