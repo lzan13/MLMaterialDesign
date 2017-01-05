@@ -106,6 +106,9 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
 
+    // square 出的网络加载库 retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     // 解析Html代码库
     compile 'org.jsoup:jsoup:1.9.2'
 
@@ -116,6 +119,12 @@ dependencies {
 
     // 观察者模式解耦库
     compile 'org.greenrobot:eventbus:3.0.0'
+
+    // 七牛文件操作库
+    compile 'com.qiniu:qiniu-android-sdk:7.3.2'
+
+    // 第三方图片加载库
+    compile 'com.github.bumptech.glide:glide:3.7.0'
 }
 
 

@@ -98,6 +98,10 @@
 
         <!--测试自定义 PopupWindow-->
         <activity android:name=".popupwindow.MLPopupWindowActivity"/>
+        <!--使用 Retrofit 网络框架测试 MobAPI 接口-->
+        <activity android:name=".retorfit.MLRetrofitActivity"/>
+
+        <activity android:name=".qiniu.MLQiniuActivity"/>
 
 
         <!--Firebase token 更新处理服务-->

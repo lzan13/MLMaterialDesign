@@ -10,10 +10,12 @@ import android.widget.Button;
 
 import net.melove.demo.design.fragment.MLFragmentActivity;
 import net.melove.demo.design.popupwindow.MLPopupWindowActivity;
+import net.melove.demo.design.qiniu.MLQiniuActivity;
 import net.melove.demo.design.recycler.MLRecycerActivity;
 import net.melove.demo.design.R;
 import net.melove.demo.design.application.MLBaseFragment;
 import net.melove.demo.design.clipphoto.MLClipPhotoActivity;
+import net.melove.demo.design.retorfit.MLRetrofitActivity;
 import net.melove.demo.design.utils.MLLog;
 import net.melove.demo.design.waveform.MLWaveformActivity;
 import net.melove.demo.design.widget.MLViewGroup;
@@ -61,7 +63,10 @@ public class MLTestFragment extends MLBaseFragment {
     }
 
     private void init() {
-        String[] btns = { "test1", "录音控件", "图片剪切", "RecyclerView", "Fragment", "Popup Window" };
+        String[] btns = {
+                "test1", "录音控件", "图片剪切", "RecyclerView", "Fragment", "Popup Window", "Retrofit",
+                "Qiniu"
+        };
         viewGroup = (MLViewGroup) getView().findViewById(R.id.ml_view_custom_viewgroup);
         for (int i = 0; i < btns.length; i++) {
             Button btn = new Button(mActivity);
@@ -106,6 +111,12 @@ public class MLTestFragment extends MLBaseFragment {
                     break;
                 case 105:
                     startActivity(new Intent(mActivity, MLPopupWindowActivity.class));
+                    break;
+                case 106:
+                    startActivity(new Intent(mActivity, MLRetrofitActivity.class));
+                    break;
+                case 107:
+                    startActivity(new Intent(mActivity, MLQiniuActivity.class));
                     break;
             }
         }
